@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author Henrique K. Secchi
  */
-public class TelaInicialCtrl implements Initializable {
+public class TelaInicialController implements Initializable {
 
     /**
      * Initializes the controller class.
