@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import org.fxmisc.richtext.CodeArea?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.krupique.visualbeans.init.TelaInicialController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.krupique.visualbeans.init.TelaInicialController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Arquivo">
             <items>
-              <MenuItem mnemonicParsing="false" text="Novo arquivo">
+              <MenuItem mnemonicParsing="false" onAction="#newFile" text="Novo arquivo">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Abrir arquivo">
+                  <MenuItem mnemonicParsing="false" onAction="#openFile" text="Abrir arquivo">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Fechar arquivo">
+                  <MenuItem mnemonicParsing="false" onAction="#closeFile" text="Fechar arquivo">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Salvar">
+                  <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Salvar">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Salvar como">
+                  <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Salvar como">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                      </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Sair">
+                  <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="Sair">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
@@ -70,24 +72,13 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabFiles" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab text="Untitled Tab 1">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TextArea layoutX="54.0" layoutY="14.0" prefHeight="200.0" prefWidth="525.0" />
-                              <TextArea editable="false" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="39.0" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                  <Tab text="Comita buceta">
+                  <Tab text="Teste1">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane>
                            <children>
-                              <TextArea layoutX="54.0" layoutY="14.0" prefHeight="200.0" prefWidth="525.0" />
-                              <TextArea editable="false" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="39.0" />
+                              <CodeArea prefHeight="336.0" prefWidth="1070.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -96,15 +87,36 @@
             </TabPane>
          </center>
          <top>
-            <AnchorPane prefHeight="37.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="50.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="14.0" layoutY="10.0" text="new file" />
-                  <Label layoutX="65.0" layoutY="10.0" text="open file" />
-                  <Label layoutX="121.0" layoutY="10.0" text="save file" />
-                  <Label layoutX="174.0" layoutY="10.0" text="Compile" />
+                  <Pane fx:id="panenew" layoutX="19.0" layoutY="-1.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgnew" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseEntered="#evtNewEntered" onMouseExited="#evtNewExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="paneopen" layoutX="15.0" layoutY="15.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgopen" fitHeight="40.0" fitWidth="40.0" layoutX="143.0" layoutY="48.0" onMouseEntered="#evtOpenEntered" onMouseExited="#evtOpenExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="panesave" layoutX="25.0" layoutY="25.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgsave" fitHeight="40.0" fitWidth="40.0" layoutX="245.0" layoutY="48.0" onMouseEntered="#evtSaveEntered" onMouseExited="#evtSaveExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="5.0" />
+                  <Separator layoutX="142.0" layoutY="20.0" orientation="VERTICAL" prefHeight="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="panecompile" layoutX="35.0" layoutY="35.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgcompile" fitHeight="40.0" fitWidth="40.0" layoutX="360.0" layoutY="48.0" onMouseEntered="#evtCompileEntered" onMouseExited="#evtCompileExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
          </top>
+         <bottom>
+            <TabPane fx:id="tabAnalyzes" prefHeight="250.0" prefWidth="1080.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab text="Análise Semântica">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                <Tab text="Análise Léxica">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </bottom>
       </BorderPane>
    </center>
 </BorderPane>
