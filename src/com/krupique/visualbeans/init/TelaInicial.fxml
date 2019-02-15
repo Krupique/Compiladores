@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import org.fxmisc.richtext.CodeArea?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.krupique.visualbeans.init.TelaInicialController">
+<BorderPane fx:id="panePrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.krupique.visualbeans.init.TelaInicialController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -87,17 +87,17 @@
             </TabPane>
          </center>
          <top>
-            <AnchorPane prefHeight="50.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="paneButtons" prefHeight="50.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="panenew" layoutX="19.0" layoutY="-1.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                  <ImageView fx:id="imgnew" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseEntered="#evtNewEntered" onMouseExited="#evtNewExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                  <Pane fx:id="paneopen" layoutX="15.0" layoutY="15.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0" />
-                  <ImageView fx:id="imgopen" fitHeight="40.0" fitWidth="40.0" layoutX="143.0" layoutY="48.0" onMouseEntered="#evtOpenEntered" onMouseExited="#evtOpenExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0" />
-                  <Pane fx:id="panesave" layoutX="25.0" layoutY="25.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="5.0" />
-                  <ImageView fx:id="imgsave" fitHeight="40.0" fitWidth="40.0" layoutX="245.0" layoutY="48.0" onMouseEntered="#evtSaveEntered" onMouseExited="#evtSaveExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="panenew" layoutX="19.0" layoutY="-1.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgnew" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseClicked="#evtNewFile" onMouseEntered="#evtNewEntered" onMouseExited="#evtNewExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="paneopen" layoutX="15.0" layoutY="15.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgopen" fitHeight="40.0" fitWidth="40.0" layoutX="143.0" layoutY="48.0" onMouseClicked="#evtOpenFile" onMouseEntered="#evtOpenEntered" onMouseExited="#evtOpenExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="panesave" layoutX="25.0" layoutY="25.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgsave" fitHeight="40.0" fitWidth="40.0" layoutX="245.0" layoutY="48.0" onMouseClicked="#evtSaveFile" onMouseEntered="#evtSaveEntered" onMouseExited="#evtSaveExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="5.0" />
                   <Separator layoutX="142.0" layoutY="20.0" orientation="VERTICAL" prefHeight="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="5.0" />
-                  <Pane fx:id="panecompile" layoutX="35.0" layoutY="35.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
-                  <ImageView fx:id="imgcompile" fitHeight="40.0" fitWidth="40.0" layoutX="360.0" layoutY="48.0" onMouseEntered="#evtCompileEntered" onMouseExited="#evtCompileExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
+                  <Pane fx:id="panecompile" layoutX="35.0" layoutY="35.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
+                  <ImageView fx:id="imgcompile" fitHeight="40.0" fitWidth="40.0" layoutX="360.0" layoutY="48.0" onMouseClicked="#evtCompileFile" onMouseEntered="#evtCompileEntered" onMouseExited="#evtCompileExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
          </top>

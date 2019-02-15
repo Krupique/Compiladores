@@ -1,0 +1,82 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14/02/2019, 22:43:35
+    Author     : Henrique K. Secchi070026
+*/
+
+.menu-bar{
+  -fx-background-color: #34333A;
+  -fx-border-color:  #232229;
+ -fx-border-width: 1
+}
+
+.menu-bar .label {
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #FFFFFF;
+}
+
+.context-menu
+{
+    -fx-background-color: #444444;   
+}
+
+#paneButtons
+{
+    -fx-background-color: #34333A;
+    
+}
+
+#panenew, #paneopen, #panesave, #panecompile
+{
+    -fx-background-radius:7px;
+    -fx-background-color: #34333A;
+}
+
+#panePrincipal
+{
+    -fx-background-color: #34333A;
+}               
+
+.tab
+{
+    -fx-padding: 0 1.5em 0 0.3em;
+    -fx-background-color: #121118;
+}
+
+.tab-label
+{
+    -fx-text-fill: #FFFFFF;
+}
+
+.tab-header-background
+{
+    -fx-background-color: #45444B;
+    -fx-border-color:  #34333A;
+    -fx-border-width: 1
+}
+
+.tab:hover, .tab:selected
+{
+    -fx-background-color: #34333A;
+    -fx-text-fill: white;
+}
+
+.code-area{
+-fx-background-color:#121118;
+}
+.styled-text-area .label{
+-fx-background-color:#232229;
+}
+
+.code-area .text {
+    -fx-fill: #FDD041;
+    -fx-font-weight: bold;
+}
+
+.paragraph-box > .paragraph-text > .text {
+    -fx-fill: white;
+}

@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -51,13 +52,34 @@ public class TelaInicialController implements Initializable {
     private Pane panesave;
     @FXML
     private Pane panecompile;
+    @FXML
+    private BorderPane panePrincipal;
+    @FXML
+    private AnchorPane paneButtons;
 
+    private int flagTheme;
+    private String corTheme;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         carragarImagens(1);
+        carregarCss();
         
         listtabs = new ArrayList<Tab>();
     }    
+    
+    public void carregarCss()
+    {
+        flagTheme = 1;
+        /*if(flagTheme == 1)
+            corTheme = "";
+        else if(flagTheme == 2)
+            corTheme = "";
+        else if(flagTheme == 3)
+            corTheme = "";*/
+        corTheme = "#777777";
+        panePrincipal.getStylesheets().add("com/krupique/visualbeans/styles/main_theme.css");
+    }
 
     public void carragarImagens(int num)
     {
@@ -87,6 +109,11 @@ public class TelaInicialController implements Initializable {
     
     @FXML
     private void newFile(ActionEvent event) {
+        newTabFile();
+    }
+    
+    public void newTabFile()
+    {
         Tab tab = new Tab("Sem título" + (listtabs.size() + 1));
         listtabs.add(tab);
         
@@ -133,41 +160,62 @@ public class TelaInicialController implements Initializable {
 
     @FXML
     private void evtCompileExited(MouseEvent event) {
-        panecompile.setStyle("-fx-background-color:white");
+        panecompile.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtCompileEntered(MouseEvent event) {
-        panecompile.setStyle("-fx-background-color:black");
+        panecompile.setStyle("-fx-background-color:" + corTheme
+                           + ";-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtNewExited(MouseEvent event) {
-        panenew.setStyle("-fx-background-color:white");
+        panenew.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtNewEntered(MouseEvent event) {
-        panenew.setStyle("-fx-background-color:black");
+        panenew.setStyle("-fx-background-color:" + corTheme
+                       + ";-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtOpenExited(MouseEvent event) {
-        paneopen.setStyle("-fx-background-color:white");
+        paneopen.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtOpenEntered(MouseEvent event) {
-        paneopen.setStyle("-fx-background-color:black");
+        paneopen.setStyle("-fx-background-color:" + corTheme
+                        + ";-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtSaveExited(MouseEvent event) {
-        panesave.setStyle("-fx-background-color:white");
+        panesave.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtSaveEntered(MouseEvent event) {
-        panesave.setStyle("-fx-background-color:black");
+        panesave.setStyle("-fx-background-color:" + corTheme
+                        + ";-fx-background-radius:7px;");
+    }
+
+    @FXML
+    private void evtNewFile(MouseEvent event) {
+        newTabFile();
+    }
+
+    @FXML
+    private void evtOpenFile(MouseEvent event) {
+    }
+
+    @FXML
+    private void evtSaveFile(MouseEvent event) {
+    }
+
+    @FXML
+    private void evtCompileFile(MouseEvent event) {
     }
 }
