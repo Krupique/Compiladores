@@ -59,6 +59,8 @@ public class TelaInicialController implements Initializable {
 
     private int flagTheme;
     private String corTheme;
+    @FXML
+    private AnchorPane ancAnalyzes;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
