@@ -5,17 +5,19 @@
  */
 package com.krupique.visualbeans.init;
 
+import com.krupique.visualbeans.utils.Colors;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -71,6 +73,7 @@ public class TelaInicialController implements Initializable {
         carragarImagens(1);
         carregarCss();
         
+        
         listtabs = new ArrayList<Tab>();
     }    
     
@@ -124,6 +127,17 @@ public class TelaInicialController implements Initializable {
         listtabs.add(tab);
         
         CodeArea code = new CodeArea();
+        code.setOnKeyTyped(new EventHandler<KeyEvent>()
+        {
+            @Override
+            public void handle(KeyEvent event) {
+                
+            }
+        });
+        
+        Colors cr = new Colors(code);
+        code = cr.getCodeArea();
+        
         
         AnchorPane pane = new AnchorPane();
         tab.setContent(pane);
@@ -166,44 +180,68 @@ public class TelaInicialController implements Initializable {
 
     @FXML
     private void evtCompileExited(MouseEvent event) {
+        double escala = 0.8;
+        imgcompile.setScaleX(escala);
+        imgcompile.setScaleY(escala);
         panecompile.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtCompileEntered(MouseEvent event) {
+        double escala = 1;
+        imgcompile.setScaleX(escala);
+        imgcompile.setScaleY(escala);
         panecompile.setStyle("-fx-background-color:" + corTheme
                            + ";-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtNewExited(MouseEvent event) {
+        double escala = 0.8;
+        imgnew.setScaleX(escala);
+        imgnew.setScaleY(escala);
         panenew.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtNewEntered(MouseEvent event) {
+        double escala = 1;
+        imgnew.setScaleX(escala);
+        imgnew.setScaleY(escala);
         panenew.setStyle("-fx-background-color:" + corTheme
                        + ";-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtOpenExited(MouseEvent event) {
+        double escala = 0.8;
+        imgopen.setScaleX(escala);
+        imgopen.setScaleY(escala);
         paneopen.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtOpenEntered(MouseEvent event) {
+        double escala = 1;
+        imgopen.setScaleX(escala);
+        imgopen.setScaleY(escala);
         paneopen.setStyle("-fx-background-color:" + corTheme
                         + ";-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtSaveExited(MouseEvent event) {
+        double escala = 0.8;
+        imgsave.setScaleX(escala);
+        imgsave.setScaleY(escala);
         panesave.setStyle("-fx-background-radius:7px;");
     }
 
     @FXML
     private void evtSaveEntered(MouseEvent event) {
+        double escala = 1;
+        imgsave.setScaleX(escala);
+        imgsave.setScaleY(escala);
         panesave.setStyle("-fx-background-color:" + corTheme
                         + ";-fx-background-radius:7px;");
     }
@@ -223,5 +261,9 @@ public class TelaInicialController implements Initializable {
 
     @FXML
     private void evtCompileFile(MouseEvent event) {
+        AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
+        CodeArea c = (CodeArea)p.getChildren().get(0);
+       
+        System.out.println("Foi por favor: " + c.getText());
     }
 }

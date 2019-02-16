@@ -10,13 +10,14 @@
 }
 
 .menu-bar .label {
-    -fx-font-family: "Segoe UI Light";
     -fx-text-fill: #FFFFFF;
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: bold;
 }
 
 .context-menu
 {
-    -fx-background-color: #444444;   
+    -fx-background-color: #56555B;   
 }
 
 #paneButtons
@@ -45,6 +46,8 @@
 .tab-label
 {
     -fx-text-fill: #FFFFFF;
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: bold;
 }
 
 .tab-header-background
@@ -58,21 +61,9 @@
     -fx-text-fill: white;
 }
 
-.code-area{
--fx-background-color:#121118;
-}
-.styled-text-area .label{
--fx-background-color:#232229;
-}
 
-.code-area .text {
-    -fx-fill: #FDD041;
-    -fx-font-weight: bold;
-}
 
-.paragraph-box > .paragraph-text > .text {
-    -fx-fill: white;
-}
+
 
 #ancAnalyzes, #ancTabTokens
 {
@@ -83,3 +74,5 @@
 {
     -fx-background-color: #34333A;
 }
+
+

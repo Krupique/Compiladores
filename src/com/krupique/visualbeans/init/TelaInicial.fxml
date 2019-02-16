@@ -142,8 +142,11 @@
                                        <children>
                                           <TableView layoutX="14.0" layoutY="14.0" prefHeight="581.0" prefWidth="280.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                             <columns>
-                                              <TableColumn prefWidth="75.0" text="C1" />
-                                              <TableColumn prefWidth="75.0" text="C2" />
+                                              <TableColumn prefWidth="66.0" text="Palavra" />
+                                              <TableColumn prefWidth="75.0" text="Token" />
+                                                <TableColumn prefWidth="50.0" text="Estado" />
+                                                <TableColumn prefWidth="44.0" text="Linha" />
+                                                <TableColumn prefWidth="44.0" text="Coluna" />
                                             </columns>
                                           </TableView>
                                        </children>
