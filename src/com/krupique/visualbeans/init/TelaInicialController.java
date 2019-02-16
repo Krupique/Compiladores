@@ -61,6 +61,10 @@ public class TelaInicialController implements Initializable {
     private String corTheme;
     @FXML
     private AnchorPane ancAnalyzes;
+    @FXML
+    private AnchorPane ancTabTokens;
+    @FXML
+    private TabPane tabTokens;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -130,7 +134,7 @@ public class TelaInicialController implements Initializable {
 
     public CodeArea configurarCodeArea(CodeArea code)
     {
-        code.setPrefSize(1070, 336);
+        code.setPrefSize(770, 336);
         code.setLayoutX(5);
         code.setLayoutY(5);
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));

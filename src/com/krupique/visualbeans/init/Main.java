@@ -23,6 +23,9 @@ public class Main extends Application {
         
         Scene scene = new Scene(root);
         
+        stage.setResizable(false);
+        stage.setMaxWidth(1085);
+        stage.setMaxHeight(730);
         stage.setScene(scene);
         stage.show();
     }

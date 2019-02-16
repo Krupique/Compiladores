@@ -1,11 +1,6 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
 /* 
     Created on : 14/02/2019, 22:43:35
-    Author     : Henrique K. Secchi070026
+    Author     : Henrique K. Secchi
 */
 
 .menu-bar{
@@ -55,8 +50,6 @@ and open the template in the editor.
 .tab-header-background
 {
     -fx-background-color: #45444B;
-    -fx-border-color:  #34333A;
-    -fx-border-width: 1
 }
 
 .tab:hover, .tab:selected
@@ -79,4 +72,14 @@ and open the template in the editor.
 
 .paragraph-box > .paragraph-text > .text {
     -fx-fill: white;
+}
+
+#ancAnalyzes, #ancTabTokens
+{
+    -fx-background-color: #45444B;
+}
+
+#tabAnalyzes, #tabTokens
+{
+    -fx-background-color: #34333A;
 }
