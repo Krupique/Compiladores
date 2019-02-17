@@ -8,29 +8,48 @@ and open the template in the editor.
     Author     : Henrique K. Secchi
 */
 
-.keyword
-{
+.keyword{
     -fx-fill:cyan;
 }
 
-.simbolo
-{
-    -fx-fill:blueviolet;
-}
-
-.letters
-{
+.letters{
     -fx-fill:darkorange;
 }
 
-.string
-{
+.simbolo {
+    -fx-fill:blueviolet;
+}
+
+.numeros{
+    -fx-fill: white;
+}
+
+.char{
+    -fx-fill: mediumspringgreen;
+}
+
+.string{
     -fx-fill:indianred;
 }
 
-.code-area{
--fx-background-color:#121118;
+.coment{
+    -fx-fill: deeppink;
 }
+
+.resto{
+    -fx-fill: white;
+}
+
+.code-area{
+    -fx-background-color:#121118;
+    
+}
+
+.caret {
+    -fx-stroke: white;
+}
+
 .styled-text-area .label{
--fx-background-color:#232229;
+    -fx-background-color:#232229;
+    
 }
