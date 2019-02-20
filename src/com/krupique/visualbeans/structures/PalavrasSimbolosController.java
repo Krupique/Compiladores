@@ -17,6 +17,9 @@ public class PalavrasSimbolosController {
     
     public PalavrasSimbolosController()
     {
+        listPalavras = new ArrayList<PalavrasReservadas>();
+        listSimbolos = new ArrayList<SimbolosReservados>();
+        
         iniciarPalavras();
         iniciarSimbolos();
     }
@@ -97,7 +100,7 @@ public class PalavrasSimbolosController {
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("!", "negação", "tk_negacao");
         listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("'\\n'", "quebra de linha", "tk_barra_n");
+        /*simbolos = new SimbolosReservados("'\\n'", "quebra de linha", "tk_barra_n");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("'\\0'", "final de linha", "tk_barra_zero");
         listSimbolos.add(simbolos);
@@ -106,7 +109,7 @@ public class PalavrasSimbolosController {
         simbolos = new SimbolosReservados("'\\\"'", "barra aspas", "tk_barra_aspas");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("\"", "leitura de string", "tk_leitura_string");
-        listSimbolos.add(simbolos);
+        listSimbolos.add(simbolos);*/
         simbolos = new SimbolosReservados("'", "leitura de caracter", "tk_leitura_char");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados(",", "vírgula", "tk_virgula");
@@ -171,21 +174,87 @@ public class PalavrasSimbolosController {
         return listSimbolos;
     }
     
-    public String buscaToken(String token)
+    public boolean contemToken(String token)
     {
-        String aux = "", res;
-        for (int i = 0; i < listPalavras.size() && aux.equals(""); i++) {
-            if(token.equals(listPalavras.get(i).getPalavra()))
-            aux = listPalavras.get(i).getToken();
-        }
+        int i = 0;
+        while(i < listPalavras.size() && !listPalavras.get(i).getPalavra().contains(token))
+            i++;
         
-        if(aux.equals(""))
+        if(i < listPalavras.size())
+            return true;
+        else
         {
-            for (int i = 0; i < listSimbolos.size() && aux.equals(""); i++) {
-                aux = listSimbolos.get(i).getToken();
-            }
+            i = 0;
+            while(i < listSimbolos.size() && !listSimbolos.get(i).getSimbolo().contains(token))
+                i++;
+            
+            if(i < listSimbolos.size())
+                return true;
         }
+        return false;
+    }
+    
+    public boolean buscaToken(String token)
+    {
+        int i = 0;
+        while(i < listPalavras.size() && !listPalavras.get(i).getPalavra().equals(token))
+            i++;
         
-        return aux;
+        if(i < listPalavras.size())
+            return true;
+        else
+        {
+            i = 0;
+            while(i < listSimbolos.size() && !listSimbolos.get(i).getSimbolo().equals(token))
+                i++;
+            
+            if(i < listSimbolos.size())
+                return true;
+        }
+        return false;
+    }
+    
+    public boolean buscaSimbolo(String token)
+    {
+        int i = 0;
+        while(i < listSimbolos.size() && !listSimbolos.get(i).getSimbolo().equals(token))
+            i++;
+
+        if(i < listSimbolos.size())
+            return true;
+        return false;
+    }
+    
+    public boolean buscaPalavra (String token)
+    {
+        int i = 0;
+        while(i < listPalavras.size() && !listPalavras.get(i).getPalavra().equals(token))
+            i++;
+        
+        if(i < listPalavras.size())
+            return true;
+        return false;
+    }
+    
+    public boolean contemSimbolo(String token)
+    {
+        int i = 0;
+        while(i < listSimbolos.size() && !listSimbolos.get(i).getSimbolo().contains(token))
+            i++;
+
+        if(i < listSimbolos.size())
+            return true;
+        return false;
+    }
+    
+    public boolean contemPalavra (String token)
+    {
+        int i = 0;
+        while(i < listPalavras.size() && !listPalavras.get(i).getPalavra().contains(token))
+            i++;
+        
+        if(i < listPalavras.size())
+            return true;
+        return false;
     }
 }

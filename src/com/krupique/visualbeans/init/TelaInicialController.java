@@ -272,6 +272,8 @@ public class TelaInicialController implements Initializable {
        
         
         lexica = new Lexica(c.getText());
+        lexica.gerarAnalise();
+        
         //System.out.println("Foi por favor: " + c.getText());
     }
     

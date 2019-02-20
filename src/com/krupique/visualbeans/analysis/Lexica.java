@@ -10,19 +10,70 @@ import java.util.ArrayList;
  */
 public class Lexica {
 
-    String texto;
-    ArrayList<TabelaTokens> tabela;
-    PalavrasSimbolosController tokens;
+    private String texto;
+    private String analise;
+    private ArrayList<TabelaTokens> tabela;
+    private PalavrasSimbolosController tokens;
     
     public Lexica(String texto) {
         this.texto = texto;
+        tokens = new PalavrasSimbolosController();
     }
 
-    /*public String analisar()
+    public boolean validar()
     {
-        for (int i = 0; i < texto.length(); i++) {
-            String aux = texto.charAt(i) + "";
+        return false;
+    }
+    
+    public String gerarAnalise()
+    {
+        String str = texto.replaceAll("\\s+", " ");
+        System.out.println("STR: " + str);
+        String res = "";
+        String ant = "";
+        String aux = "";
+        for (int i = 0; i < str.length(); i++) {
+            ant = aux;
+            aux += str.charAt(i);
             
+            if(!tokens.contemToken(aux))
+            {
+                System.out.println("FALSE");
+                if(tokens.buscaToken(ant))
+                {
+                    //System.out.println("ACHOU ANT");
+                    //GUARDAR ANT NA TABELA DE TOKENS, BUSCAR E TRATAR ANT
+                    res += ant + ": TOKEN\n";
+                    i = i - (aux.length() - ant.length());
+                    if(str.charAt(i + 1) == ' ')
+                        i++;
+                    
+                    aux = "";
+                }
+                else
+                {
+                    aux = str.charAt(i) + "";
+                    //ant += str.charAt(i);
+                    while(i < str.length() && !tokens.contemSimbolo(aux) && !aux.equals(" "))
+                    {
+                        ant += str.charAt(i);
+                        i++;
+                        aux = str.charAt(i) + "";
+                    }
+                    if(aux.equals(" ")){
+                        aux = "";
+                    }
+                    //GUARDAR IDENTIFICADOR
+                    res += ant + ": IDENTIFICADOR\n";
+                }
+            }
+            else
+            {
+                //System.out.println("TRUE");
+            }
         }
-    }*/
+        
+        System.out.println("Res:\n" + res);
+        return str;
+    }
 }
