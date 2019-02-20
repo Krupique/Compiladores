@@ -28,6 +28,7 @@ public class Lexica {
     public String gerarAnalise()
     {
         String str = texto.replaceAll("\\s+", " ");
+        str += " ;";
         System.out.println("STR: " + str);
         String res = "";
         String ant = "";

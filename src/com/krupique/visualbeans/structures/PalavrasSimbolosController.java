@@ -114,6 +114,8 @@ public class PalavrasSimbolosController {
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados(",", "vírgula", "tk_virgula");
         listSimbolos.add(simbolos);
+        simbolos = new SimbolosReservados(".", "ponto", "tk_ponto");
+        listSimbolos.add(simbolos);
     }    
 
     private void iniciarPalavras() {
