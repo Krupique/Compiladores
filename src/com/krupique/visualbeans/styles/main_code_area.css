@@ -9,40 +9,47 @@ and open the template in the editor.
 */
 
 .keyword{
-    -fx-fill:cyan;
+    -fx-fill:#3c6fc3;
+    -fx-font-weight: bold;
 }
 
 .letters{
-    -fx-fill:darkorange;
+    -fx-fill:white;
+    -fx-font-weight: bold;
 }
 
 .simbolo {
-    -fx-fill:blueviolet;
+    -fx-fill:#25a255;
+    -fx-font-weight: bold;
 }
 
 .numeros{
-    -fx-fill: white;
+    -fx-fill: #afa3ff;
+    -fx-font-weight: bold;
 }
 
 .char{
-    -fx-fill: mediumspringgreen;
+    -fx-fill: #ff992d;
+    -fx-font-weight: bold;
 }
 
 .string{
-    -fx-fill:indianred;
+    -fx-fill:#e55699;
+    -fx-font-weight: bold;
 }
 
 .coment{
-    -fx-fill: deeppink;
+    -fx-fill: #d66bff;
+    -fx-font-weight: bold;
 }
 
 .resto{
     -fx-fill: white;
+    -fx-font-weight: bold;
 }
 
 .code-area{
     -fx-background-color:#121118;
-    
 }
 
 .caret {

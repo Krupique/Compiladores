@@ -26,7 +26,7 @@ public class Colors {
     private static final String NUMBERS_PATTERN = "[0-9]+";
     private static final String CHAR_PATTERN = "\'[\\S+\\s]{1}\'";
     private static final String STRING_PATTERN = "\\\"([^\\\"\\\\\\\\]|\\\\\\\\.)*\\\"";
-    private static final String COMENT_PATTERN = "@.*{0,}@";
+    private static final String COMENT_PATTERN = "\\@([^\\@\\\\\\\\]|\\\\\\\\.)*\\@";
     private static final String RESTO_PATTERN = "\\S+";
     
     private static final Pattern PATTERN = Pattern.compile(

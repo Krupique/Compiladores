@@ -171,4 +171,21 @@ public class PalavrasSimbolosController {
         return listSimbolos;
     }
     
+    public String buscaToken(String token)
+    {
+        String aux = "", res;
+        for (int i = 0; i < listPalavras.size() && aux.equals(""); i++) {
+            if(token.equals(listPalavras.get(i).getPalavra()))
+            aux = listPalavras.get(i).getToken();
+        }
+        
+        if(aux.equals(""))
+        {
+            for (int i = 0; i < listSimbolos.size() && aux.equals(""); i++) {
+                aux = listSimbolos.get(i).getToken();
+            }
+        }
+        
+        return aux;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package com.krupique.visualbeans.init;
 
+import com.krupique.visualbeans.analysis.Lexica;
 import com.krupique.visualbeans.utils.Colors;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -67,6 +69,10 @@ public class TelaInicialController implements Initializable {
     private AnchorPane ancTabTokens;
     @FXML
     private TabPane tabTokens;
+    
+    private String tecla;
+    
+    private Lexica lexica;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -131,7 +137,7 @@ public class TelaInicialController implements Initializable {
         {
             @Override
             public void handle(KeyEvent event) {
-                
+                completaTexto(event);
             }
         });
         
@@ -264,6 +270,15 @@ public class TelaInicialController implements Initializable {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
        
-        System.out.println("Foi por favor: " + c.getText());
+        
+        lexica = new Lexica(c.getText());
+        //System.out.println("Foi por favor: " + c.getText());
+    }
+    
+    public void completaTexto(KeyEvent event)
+    {
+        AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
+        CodeArea c = (CodeArea)p.getChildren().get(0);
+        
     }
 }
