@@ -109,13 +109,13 @@ public class PalavrasSimbolosController {
         simbolos = new SimbolosReservados("'\\\"'", "barra aspas", "tk_barra_aspas");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("\"", "leitura de string", "tk_leitura_string");
-        listSimbolos.add(simbolos);*/
-        simbolos = new SimbolosReservados("'", "leitura de caracter", "tk_leitura_char");
         listSimbolos.add(simbolos);
+        simbolos = new SimbolosReservados("'", "leitura de caracter", "tk_leitura_char");
+        listSimbolos.add(simbolos);*/
         simbolos = new SimbolosReservados(",", "vírgula", "tk_virgula");
         listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados(".", "ponto", "tk_ponto");
-        listSimbolos.add(simbolos);
+        /*simbolos = new SimbolosReservados(".", "ponto", "tk_ponto");
+        listSimbolos.add(simbolos);*/
     }    
 
     private void iniciarPalavras() {
@@ -258,5 +258,24 @@ public class PalavrasSimbolosController {
         if(i < listPalavras.size())
             return true;
         return false;
+    }
+    
+    public String buscarToken(String token)
+    {
+        int i = 0;
+        while(i < listSimbolos.size() && !listSimbolos.get(i).getSimbolo().equals(token))
+            i++;
+        
+        if(i < listSimbolos.size())
+            return listSimbolos.get(i).getToken();
+        else
+        {
+            i = 0;
+            while(i < listPalavras.size() && !listPalavras.get(i).getPalavra().equals(token))
+                i++;
+            if(i < listPalavras.size())
+                return listPalavras.get(i).getToken();
+        }
+        return null;
     }
 }

@@ -282,5 +282,7 @@ public class TelaInicialController implements Initializable {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
         
+        
+        System.out.println(event.getCharacter());
     }
 }

@@ -44,7 +44,7 @@ public class Lexica {
                 {
                     //System.out.println("ACHOU ANT");
                     //GUARDAR ANT NA TABELA DE TOKENS, BUSCAR E TRATAR ANT
-                    res += ant + ": TOKEN\n";
+                    res += ant + " " + tokens.buscarToken(ant) + "\n";
                     i = i - (aux.length() - ant.length());
                     if(str.charAt(i + 1) == ' ')
                         i++;
@@ -65,7 +65,7 @@ public class Lexica {
                         aux = "";
                     }
                     //GUARDAR IDENTIFICADOR
-                    res += ant + ": IDENTIFICADOR\n";
+                    res += ant + " " + tratarIdentificador(ant) + "\n";
                 }
             }
             else
@@ -76,5 +76,77 @@ public class Lexica {
         
         System.out.println("Res:\n" + res);
         return str;
+    }
+    
+    private String tratarIdentificador(String id)
+    {
+        int tipo;
+        int i;
+        char aux = id.charAt(0);
+        boolean flag;
+        
+        if(aux > 47 && aux < 58 && id.length() > 1)
+        {
+            i = 1;
+            flag = true;
+            while(i < id.length() && flag)
+            {
+                aux = id.charAt(i);
+                if(aux > 57 || aux < 48)
+                    flag = false;
+                i++;
+            }
+            if(flag)
+                return "valor";
+            return "invalido";
+        }
+        else if(aux == '_')
+            return "identificador";
+        else if(aux == 'o' && id.length() > 1)
+        {
+            i = 1;
+            flag = true;
+            while(i < id.length() && flag)
+            {
+                aux = id.charAt(i);
+                if(aux > 55 || aux < 48)
+                    flag = false;
+                i++;
+            }
+            if(flag)
+                return "valor_octal";
+            return "identificador";
+        }
+        else if(aux == 'x' && id.length() > 1)
+        {
+            i = 1;
+            flag = true;
+            while(i < id.length() && flag)
+            {
+                aux = id.charAt(i);
+                if(!((aux > 47 && aux < 58) || (aux > 96 && aux < 103) || (aux > 64 && aux < 71)))
+                    flag = false;
+                i++;
+            }
+            if(flag)
+                return "valor_hexadecimal";
+            return "identificador";
+        }
+        else if(aux == '"')
+        {
+            aux = id.charAt(id.length() - 1);
+            if(aux == '"')
+                return "valor_string";
+            return "string_invalida";
+        }
+        else if(aux =='\'')
+        {
+            aux = id.charAt(id.length() - 1);
+            if(aux == '\'' && id.length() == 3)
+                return "valor_char";
+            return "char_invalido";     
+        }
+        
+        return "identificador";
     }
 }
