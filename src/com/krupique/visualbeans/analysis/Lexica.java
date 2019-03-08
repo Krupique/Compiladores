@@ -18,6 +18,7 @@ public class Lexica {
     public Lexica(String texto) {
         this.texto = texto;
         tokens = new PalavrasSimbolosController();
+        tabela = new ArrayList<TabelaTokens>();
     }
 
     public boolean validar()
@@ -25,8 +26,9 @@ public class Lexica {
         return false;
     }
     
-    public String gerarAnalise()
+    public Object[] gerarAnalise()
     {
+        Object[] obj = new Object[2];
         String str = texto.replaceAll("\\s+", " ");
         str += " ;";
         System.out.println("STR: " + str);
@@ -44,6 +46,7 @@ public class Lexica {
                 {
                     //System.out.println("ACHOU ANT");
                     //GUARDAR ANT NA TABELA DE TOKENS, BUSCAR E TRATAR ANT
+                    tabela.add(new TabelaTokens(ant, tokens.buscarToken(ant), "test", 0, 0));
                     res += ant + " " + tokens.buscarToken(ant) + "\n";
                     i = i - (aux.length() - ant.length());
                     if(str.charAt(i + 1) == ' ')
@@ -65,6 +68,7 @@ public class Lexica {
                         aux = "";
                     }
                     //GUARDAR IDENTIFICADOR
+                    tabela.add(new TabelaTokens(ant, tratarIdentificador(ant), "teste", 0, 0));
                     res += ant + " " + tratarIdentificador(ant) + "\n";
                 }
             }
@@ -75,7 +79,10 @@ public class Lexica {
         }
         
         System.out.println("Res:\n" + res);
-        return str;
+        //return str;
+        obj[0] = res;
+        obj[1] = tabela;
+        return obj;
     }
     
     private String tratarIdentificador(String id)

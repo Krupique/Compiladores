@@ -6,6 +6,7 @@
 package com.krupique.visualbeans.init;
 
 import com.krupique.visualbeans.analysis.Lexica;
+import com.krupique.visualbeans.analysis.Sintatica;
 import com.krupique.visualbeans.utils.Colors;
 import java.net.URL;
 import java.util.ArrayList;
@@ -271,9 +272,11 @@ public class TelaInicialController implements Initializable {
         CodeArea c = (CodeArea)p.getChildren().get(0);
        
         
-        lexica = new Lexica(c.getText());
-        lexica.gerarAnalise();
+        //lexica = new Lexica(c.getText());
+        //lexica.gerarAnalise();
         
+        Sintatica sintatica = new Sintatica(c.getText());
+        sintatica.analisar();
         //System.out.println("Foi por favor: " + c.getText());
     }
     
@@ -281,7 +284,6 @@ public class TelaInicialController implements Initializable {
     {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
-        
         
         System.out.println(event.getCharacter());
     }
