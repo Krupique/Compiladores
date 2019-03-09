@@ -94,6 +94,7 @@ public class Lexica {
         
         if(aux > 47 && aux < 58 && id.length() > 1)
         {
+            //Validar double
             i = 1;
             flag = true;
             while(i < id.length() && flag)

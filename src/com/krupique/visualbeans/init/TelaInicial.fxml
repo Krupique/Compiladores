@@ -113,7 +113,7 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <JFXTextArea editable="false" focusColor="#34333a" layoutX="14.0" layoutY="16.0" prefHeight="206.0" prefWidth="760.0" promptText="Remover o CSS do Scenebuilder" style="-fx-background-color: white;" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                          <JFXTextArea fx:id="textLexico" editable="false" focusColor="#34333a" layoutX="14.0" layoutY="16.0" prefHeight="206.0" prefWidth="760.0" promptText="Remover o CSS do Scenebuilder" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                        </children>
                                     </AnchorPane>
                                  </content>

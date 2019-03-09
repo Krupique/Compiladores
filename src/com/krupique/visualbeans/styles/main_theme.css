@@ -61,9 +61,13 @@
     -fx-text-fill: white;
 }
 
-
-
-
+#textLexico
+{
+    -fx-background-color: #45444B;
+    -fx-prompt-text-fill: white;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
 
 #ancAnalyzes, #ancTabTokens
 {

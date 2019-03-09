@@ -5,6 +5,7 @@
  */
 package com.krupique.visualbeans.init;
 
+import com.jfoenix.controls.JFXTextArea;
 import com.krupique.visualbeans.analysis.Lexica;
 import com.krupique.visualbeans.analysis.Sintatica;
 import com.krupique.visualbeans.utils.Colors;
@@ -72,8 +73,10 @@ public class TelaInicialController implements Initializable {
     private TabPane tabTokens;
     
     private String tecla;
-    
+    private String textoLexico;
     private Lexica lexica;
+    @FXML
+    private JFXTextArea textLexico;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -271,13 +274,15 @@ public class TelaInicialController implements Initializable {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
        
-        
+        Object[] obj = new Object[2];
         //lexica = new Lexica(c.getText());
         //lexica.gerarAnalise();
         
         Sintatica sintatica = new Sintatica(c.getText());
-        sintatica.analisar();
+        obj = sintatica.analisar();
         //System.out.println("Foi por favor: " + c.getText());
+        //textoLexico = 
+        textLexico.setText((String)obj[0]);
     }
     
     public void completaTexto(KeyEvent event)
