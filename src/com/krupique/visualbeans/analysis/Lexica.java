@@ -95,18 +95,33 @@ public class Lexica {
         if(aux > 47 && aux < 58 && id.length() > 1)
         {
             //Validar double
-            i = 1;
-            flag = true;
-            while(i < id.length() && flag)
+            if(id.contains(".")) //Pode ser double
             {
-                aux = id.charAt(i);
-                if(aux > 57 || aux < 48)
-                    flag = false;
-                i++;
+                try
+                {
+                    double db = Double.parseDouble(id);
+                    System.out.println("VALOR: DOUBLE");
+                    return "valor_double";
+                }catch(Exception er)
+                {
+                    return "invalido";
+                }
             }
-            if(flag)
-                return "valor";
-            return "invalido";
+            else
+            {
+                i = 1;
+                flag = true;
+                while(i < id.length() && flag)
+                {
+                    aux = id.charAt(i);
+                    if(aux > 57 || aux < 48)
+                        flag = false;
+                    i++;
+                }
+                if(flag)
+                    return "valor";
+                return "invalido";
+            }
         }
         else if(aux == '_')
             return "identificador";
