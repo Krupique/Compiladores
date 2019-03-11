@@ -48,8 +48,6 @@ public class TelaInicialController implements Initializable {
     private TabPane tabAnalyzes;
     @FXML
     private TabPane tabFiles;
-    
-    private ArrayList<Tab> listtabs;
     @FXML
     private Pane panenew;
     @FXML
@@ -62,28 +60,30 @@ public class TelaInicialController implements Initializable {
     private BorderPane panePrincipal;
     @FXML
     private AnchorPane paneButtons;
-
-    private int flagTheme;
-    private String corTheme;
     @FXML
     private AnchorPane ancAnalyzes;
     @FXML
     private AnchorPane ancTabTokens;
     @FXML
     private TabPane tabTokens;
+    @FXML
+    private JFXTextArea textLexico;
+
+    private ArrayList<Tab> listtabs;
+    private int flagTheme;
+    private String corTheme;
     
     private String tecla;
     private String textoLexico;
     private Lexica lexica;
-    @FXML
-    private JFXTextArea textLexico;
+    private String string;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         carragarImagens(1);
         carregarCss();
         
-        
+        string = "";
         listtabs = new ArrayList<Tab>();
     }    
     
@@ -290,6 +290,11 @@ public class TelaInicialController implements Initializable {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
         
-        System.out.println(event.getCharacter());
+        //System.out.println(event.getCharacter());
+        string += event.getCharacter();
+        if(event.getCharacter().charAt(0) == 13)
+        {
+            string += '\n';
+        }
     }
 }

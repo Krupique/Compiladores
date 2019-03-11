@@ -31,22 +31,26 @@ public class Lexica {
         Object[] obj = new Object[2];
         String str = texto.replaceAll("\\s+", " ");
         str += " ;";
-        System.out.println("STR: " + str);
         String res = "";
         String ant = "";
         String aux = "";
+        int l = 1, c = 1;
+        
         for (int i = 0; i < str.length(); i++) {
             ant = aux;
             aux += str.charAt(i);
+            if(str.charAt(i) == '£'){
+                c = 0;
+                l++;
+            }
             
             if(!tokens.contemToken(aux))
             {
-                System.out.println("FALSE");
                 if(tokens.buscaToken(ant))
                 {
                     //System.out.println("ACHOU ANT");
                     //GUARDAR ANT NA TABELA DE TOKENS, BUSCAR E TRATAR ANT
-                    tabela.add(new TabelaTokens(ant, tokens.buscarToken(ant), "test", 0, 0));
+                    tabela.add(new TabelaTokens(ant, tokens.buscarToken(ant), "test", l, c));
                     res += ant + " " + tokens.buscarToken(ant) + "\n";
                     i = i - (aux.length() - ant.length());
                     if(str.charAt(i + 1) == ' ')
@@ -56,20 +60,23 @@ public class Lexica {
                 }
                 else
                 {
-                    aux = str.charAt(i) + "";
-                    //ant += str.charAt(i);
-                    while(i < str.length() && !tokens.contemSimbolo(aux) && !aux.equals(" "))
+                    if(str.charAt(i) != '£')
                     {
-                        ant += str.charAt(i);
-                        i++;
                         aux = str.charAt(i) + "";
+                        //ant += str.charAt(i);
+                        while(i < str.length() && !tokens.contemSimbolo(aux) && !aux.equals(" "))
+                        {
+                            ant += str.charAt(i);
+                            i++;
+                            aux = str.charAt(i) + "";
+                        }
+                        if(aux.equals(" ")){
+                            aux = "";
+                        }
+                        //GUARDAR IDENTIFICADOR
+                        tabela.add(new TabelaTokens(ant, tratarIdentificador(ant), "teste", l, c));
+                        res += ant + " " + tratarIdentificador(ant) + "\n";
                     }
-                    if(aux.equals(" ")){
-                        aux = "";
-                    }
-                    //GUARDAR IDENTIFICADOR
-                    tabela.add(new TabelaTokens(ant, tratarIdentificador(ant), "teste", 0, 0));
-                    res += ant + " " + tratarIdentificador(ant) + "\n";
                 }
             }
             else
@@ -79,7 +86,7 @@ public class Lexica {
         }
         
         System.out.println("Res:\n" + res);
-        //return str;
+        
         obj[0] = res;
         obj[1] = tabela;
         return obj;

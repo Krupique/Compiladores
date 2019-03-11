@@ -19,7 +19,9 @@ public class Sintatica {
     }
     
     public Object[] analisar()
-    {
+    {   
+        codigo = codigo.replace("\n", " £ ");
+        
         Lexica lexica = new Lexica(codigo);
         Object[] obj = new Object[2];
         obj = lexica.gerarAnalise();
@@ -27,7 +29,6 @@ public class Sintatica {
         tabela = (ArrayList<TabelaTokens>)obj[1];
         
         identificarProgram();
-        
         
         return obj;
     }
