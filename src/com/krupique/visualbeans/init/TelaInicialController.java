@@ -274,7 +274,7 @@ public class TelaInicialController implements Initializable {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
        
-        Object[] obj = new Object[2];
+        Object[] obj = new Object[3];
         //lexica = new Lexica(c.getText());
         //lexica.gerarAnalise();
         
@@ -283,6 +283,9 @@ public class TelaInicialController implements Initializable {
         //System.out.println("Foi por favor: " + c.getText());
         //textoLexico = 
         textLexico.setText((String)obj[0]);
+        c.replaceText((String)obj[2]);
+        Colors cor = new Colors(c);
+        System.out.println("" + (String)obj[2]);
     }
     
     public void completaTexto(KeyEvent event)

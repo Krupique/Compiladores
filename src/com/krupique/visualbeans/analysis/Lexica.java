@@ -29,8 +29,16 @@ public class Lexica {
     public Object[] gerarAnalise()
     {
         Object[] obj = new Object[2];
-        String str = texto.replaceAll("\\s+", " ");
+        
+        String str = texto;
+        str = texto.replaceAll("\\@{1}.*\\@{1}", ""); //Remover comentarios
+        str = str.replaceAll("\t", " ");
+        str = str.replaceAll("\\s+", " ");
+        str = str.replaceAll("\\s*\\℡+", "℡");
+        str = str.replaceAll("\\℡+", " ℡");
+        str = str.replaceAll("\\s+", " ");
         str += " ;";
+        System.out.println("REGEX: " + str);
         String res = "";
         String ant = "";
         String aux = "";
@@ -39,17 +47,11 @@ public class Lexica {
         for (int i = 0; i < str.length(); i++) {
             ant = aux;
             aux += str.charAt(i);
-            if(str.charAt(i) == '£'){
-                c = 0;
-                l++;
-            }
             
-            if(!tokens.contemToken(aux))
+            if(!tokens.contemToken(aux) && !isLetra(aux, aux.length() - 1) && aux.charAt(aux.length() - 1) != '℡' && aux.charAt(0) != ' ')
             {
                 if(tokens.buscaToken(ant))
                 {
-                    //System.out.println("ACHOU ANT");
-                    //GUARDAR ANT NA TABELA DE TOKENS, BUSCAR E TRATAR ANT
                     tabela.add(new TabelaTokens(ant, tokens.buscarToken(ant), "test", l, c));
                     res += ant + " " + tokens.buscarToken(ant) + "\n";
                     i = i - (aux.length() - ant.length());
@@ -60,24 +62,31 @@ public class Lexica {
                 }
                 else
                 {
-                    if(str.charAt(i) != '£')
+                    aux = str.charAt(i) + "";
+                    while(i < str.length() && (!tokens.contemSimbolo(aux) || (i > 2 && (aux.equals("+") || aux.equals("-")) && ant.charAt(ant.length() - 1) == 'E' && isNumber(ant.charAt(ant.length() - 2)) )) && !aux.equals(" "))
                     {
+                        ant += str.charAt(i);
+                        i++;
                         aux = str.charAt(i) + "";
-                        //ant += str.charAt(i);
-                        while(i < str.length() && !tokens.contemSimbolo(aux) && !aux.equals(" "))
-                        {
-                            ant += str.charAt(i);
-                            i++;
-                            aux = str.charAt(i) + "";
-                        }
-                        if(aux.equals(" ")){
-                            aux = "";
-                        }
-                        //GUARDAR IDENTIFICADOR
-                        tabela.add(new TabelaTokens(ant, tratarIdentificador(ant), "teste", l, c));
-                        res += ant + " " + tratarIdentificador(ant) + "\n";
                     }
+                    if(aux.equals(" ")){
+                        aux = "";
+                    }
+                    //GUARDAR IDENTIFICADOR
+                    tabela.add(new TabelaTokens(ant, tratarIdentificador(ant), "teste", l, c));
+                    res += ant + " " + tratarIdentificador(ant) + "\n";
+                    
                 }
+            }
+            else if(aux.contains("℡"))
+            {
+                aux = ant;
+                c = 1;
+                l++;
+            }
+            else if(aux.charAt(0) == ' ')
+            {
+                aux = "";
             }
             else
             {
@@ -96,18 +105,19 @@ public class Lexica {
     {
         int tipo;
         int i;
+        id = id.replace("℡", "");
         char aux = id.charAt(0);
         boolean flag;
         
         if(aux > 47 && aux < 58 && id.length() > 1)
         {
             //Validar double
-            if(id.contains(".")) //Pode ser double
+            if(id.contains(".") || id.contains("E")) //Pode ser double
             {
                 try
                 {
-                    double db = Double.parseDouble(id);
                     System.out.println("VALOR: DOUBLE");
+                    double db = Double.parseDouble(id);
                     return "valor_double";
                 }catch(Exception er)
                 {
@@ -116,18 +126,15 @@ public class Lexica {
             }
             else
             {
-                i = 1;
-                flag = true;
-                while(i < id.length() && flag)
+                try
                 {
-                    aux = id.charAt(i);
-                    if(aux > 57 || aux < 48)
-                        flag = false;
-                    i++;
+                    int db = Integer.parseInt(id);
+                    System.out.println("VALOR: INT");
+                    return "valor_decimal";
+                }catch(Exception er)
+                {
+                    return "invalido";
                 }
-                if(flag)
-                    return "valor";
-                return "invalido";
             }
         }
         else if(aux == '_')
@@ -178,5 +185,17 @@ public class Lexica {
         }
         
         return "identificador";
+    }
+
+    private boolean isLetra(String aux, int i) {
+        if((aux.charAt(i) > 64 && aux.charAt(i) < 91) || (aux.charAt(i) > 96 && aux.charAt(i) < 123))
+            return true;
+        return false;
+    }
+
+    private boolean isNumber(char letra) {
+        if(letra > 47 && letra < 58)
+            return true;
+        return false;
     }
 }

@@ -40,10 +40,10 @@ public class Colors {
             "|(?<RESTO>" + RESTO_PATTERN + ")"
     );
     //Preciso fazer em tempo de execução para ir identificando os erros.
-    //Dar um jeito de arrumar o cursor piscante (tá me irritando demais essa buceta).
 
     public Colors(CodeArea codeArea) {
         this.codeArea = codeArea;
+        exampleString = "Ħ";
         start();
     }
 
@@ -53,10 +53,12 @@ public class Colors {
     
     public void start() {
         String css = "com/krupique/visualbeans/styles/main_code_area.css";
+        exampleString += "Ħ";
         codeArea.textProperty().addListener((obs, oldText, newText) -> 
         {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
+        exampleString = exampleString.replaceAll("Ħ", "");
         codeArea.replaceText(0, 0, exampleString);
         codeArea.getStylesheets().add(css);
     }
