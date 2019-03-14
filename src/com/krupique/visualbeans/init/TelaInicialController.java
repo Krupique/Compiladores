@@ -285,7 +285,7 @@ public class TelaInicialController implements Initializable {
         textLexico.setText((String)obj[0]);
         c.replaceText((String)obj[2]);
         Colors cor = new Colors(c);
-        System.out.println("" + (String)obj[2]);
+        //System.out.println("" + (String)obj[2]);
     }
     
     public void completaTexto(KeyEvent event)

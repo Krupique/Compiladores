@@ -12,16 +12,18 @@ package com.krupique.visualbeans.structures;
 public class TabelaTokens {
     private String palavra;
     private String token;
-    private String estado;
+    private String log;
+    private boolean estado;
     private int linha;
     private int coluna;
 
-    public TabelaTokens(String palavra, String token, String estado, int linha, int coluna) {
+    public TabelaTokens(String palavra, String token, String log, int linha, int coluna, boolean estado) {
         this.palavra = palavra;
         this.token = token;
-        this.estado = estado;
+        this.log = log;
         this.linha = linha;
         this.coluna = coluna;
+        this.estado = estado;
     }
 
     public String getPalavra() {
@@ -40,11 +42,11 @@ public class TabelaTokens {
         this.token = token;
     }
 
-    public String getEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
 
@@ -62,5 +64,19 @@ public class TabelaTokens {
 
     public void setColuna(int coluna) {
         this.coluna = coluna;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
+    }
+    
+    public void setLogEstado(String log, boolean estado)
+    {
+        this.log = log;
+        this.estado = estado;
     }
 }
