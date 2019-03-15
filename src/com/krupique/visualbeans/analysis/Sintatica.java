@@ -40,7 +40,7 @@ public class Sintatica {
         }
         
         
-        //identificarProgram();
+        identificarProgram();
         
         for (int j = 0; j < tabela.size(); j++) {
             if(!tabela.get(j).getEstado())
@@ -155,6 +155,7 @@ public class Sintatica {
         if(flag == 1) //Declaração de variável.
         {
             System.out.println("Declaração de variável");
+            pos = validarVariaveis(pos);
         }
         else if(flag == 2) //Expressão aritmética
         {
@@ -191,13 +192,16 @@ public class Sintatica {
     {
         if(tabela.get(pos).getToken().equals("tk_abrir_chaves"))
             return 0; //É bloco
-        return 1; //É statement
+        else if(qualStatement(pos) != -1)
+            return 1; //É statement
+        else
+            return -1; //É erro
     }
 
     private int qualStatement(int pos) {
         String token = tabela.get(pos).getToken();
         
-        if(token.equals("tk_tipo_int") || token.equals("tk_tipo_char") || token.equals("tk_tipo_boolean") || token.equals("tk_tipo_double") || token.equals("token_tipo_string"))
+        if(token.equals("tk_tipo_int") || token.equals("tk_tipo_char") || token.equals("tk_tipo_bool") || token.equals("tk_tipo_double") || token.equals("tk_tipo_string"))
             return 1; //Declaração de variável
         else if(token.equals("identificador"))
         {
@@ -265,16 +269,39 @@ public class Sintatica {
     private int validarVariaveis(int pos)
     {
         Pilha pilha = new Pilha();
-        int auxpos;
+        int auxpos = pos;
         
         while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
             pilha.push(tabela.get(pos++).getToken());
         
-        auxpos = pos - 1;
         if(pos < tabela.size())
         {
             pilha.push(tabela.get(pos++).getToken());
-            //Pode ser simplesmente uma declaração.
+            if(pilha.getTl() < 3) //Está errado.
+            {
+                if(pilha.pop().equals("tk_ponto_virgula"))
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Está faltando parâmetros na declaração!", false);
+                else
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+            }
+            else if(pilha.getTl() == 3) //Deve ser uma simples declaração.
+            {
+                if(!pilha.pop().equals("tk_ponto_virgula"))
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
+                if(!pilha.pop().equals("identificador"))
+                    tabela.get(pos - 2).setLogEstado("[Erro]: Identificador declarado incorretamente", false);
+                pilha.pop();
+            }
+            else if(pilha.getTl() == 4) //Deve ser uma declaração e uma atribuição.
+            {
+                
+            }
+            else //Deve ser uma declaração seguida de uma atribuição.
+            {
+                
+            }
+            
+            
             //Pode ser uma declaração e uma atribuição.
             //Pode ser uma declaração seguida de uma expressão matemática. 
                 //cuidado para(*=, /=, +=, -= e %=)
@@ -282,6 +309,7 @@ public class Sintatica {
         else
         {
             tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+            pos--;
         }
         return pos;
     }
