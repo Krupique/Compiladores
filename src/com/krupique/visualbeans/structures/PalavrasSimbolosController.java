@@ -124,7 +124,7 @@ public class PalavrasSimbolosController {
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("boolean", "tipo", "tk_tipo_bool");
         listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("catch", "comando", "tk_comando_catch");
+        palavra = new PalavrasReservadas("catch", "comando", "tk_comando_catch");/**/
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("char", "tipo", "tk_tipo_char");
         listPalavras.add(palavra);
@@ -142,7 +142,7 @@ public class PalavrasSimbolosController {
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("mentira", "afirmação", "tk_afirmacao_false");
         listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("new", "declaração", "tk_operador_new");
+        palavra = new PalavrasReservadas("new", "declaração", "tk_operador_new");/**/
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("null", "tipo", "tk_tipo_null");
         listPalavras.add(palavra);
@@ -158,9 +158,9 @@ public class PalavrasSimbolosController {
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("true", "afirmação", "tk_afirmacao_true");
         listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("try", "comando", "tk_comando_try");
+        palavra = new PalavrasReservadas("try", "comando", "tk_comando_try");/**/
         listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("var", "declaração", "tk_declaracao_var");
+        palavra = new PalavrasReservadas("var", "declaração", "tk_declaracao_var"); /**/
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("verdade", "afirmação", "tk_afirmacao_true");
         listPalavras.add(palavra);

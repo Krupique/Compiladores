@@ -16,7 +16,7 @@ public class Pilha {
     private ArrayList<String> token;
     
     public Pilha(){
-        tl = -1;
+        tl = 0;
         token = new ArrayList<>();
     }
     
@@ -26,11 +26,11 @@ public class Pilha {
     }
     
     public String pop(){
-        return token.get(tl--);
+        return token.get(--tl);
     }
     
     public boolean isEmpty(){
-        return tl == -1;
+        return tl == 0;
     }
     
     public int getTl(){
@@ -38,6 +38,6 @@ public class Pilha {
     }
     
     public String getTopPilha(){
-        return token.get(tl);
+        return token.get(tl - 1);
     }
 }

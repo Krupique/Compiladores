@@ -137,8 +137,6 @@ public class Lexica {
                 }
             }
         }
-        else if(aux == '_')
-            return "identificador";
         else if(aux == 'o' && id.length() > 1)
         {
             i = 1;
@@ -152,7 +150,10 @@ public class Lexica {
             }
             if(flag)
                 return "valor_octal";
-            return "identificador";
+            else if(isIdentificador(id))
+                return "identificador";
+        
+            return "invalido";
         }
         else if(aux == 'x' && id.length() > 1)
         {
@@ -167,7 +168,10 @@ public class Lexica {
             }
             if(flag)
                 return "valor_hexadecimal";
-            return "identificador";
+            else if(isIdentificador(id))
+                return "identificador";
+        
+            return "invalido";
         }
         else if(aux == '"')
         {
@@ -183,8 +187,25 @@ public class Lexica {
                 return "valor_char";
             return "char_invalido";     
         }
+        else if(isIdentificador(id))
+            return "identificador";
         
-        return "identificador";
+        return "invalido";
+    }
+    
+    private boolean isIdentificador(String str)
+    {
+        char aux = str.charAt(0);
+        if((aux > 64 && aux < 91) || (aux > 96 && aux < 123))
+        {
+            for (int i = 1; i < str.length(); i++) {
+                aux = str.charAt(i);
+                if(!((aux > 64 && aux < 91) || (aux > 96 && aux < 123) || (aux > 47 && aux < 58)))
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     private boolean isLetra(String aux, int i) {
