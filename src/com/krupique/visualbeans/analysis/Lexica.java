@@ -42,18 +42,22 @@ public class Lexica {
         String res = "";
         String ant = "";
         String aux = "";
-        int l = 1, c = 1;
+        String identificador;
+        String tk;
+        int l = 1, c = 0;
         
         for (int i = 0; i < str.length(); i++) {
             ant = aux;
             aux += str.charAt(i);
+            c++;
             
             if(!tokens.contemToken(aux) && !isLetra(aux, aux.length() - 1) && aux.charAt(aux.length() - 1) != '℡' && aux.charAt(0) != ' ')
             {
                 if(tokens.buscaToken(ant))
                 {
-                    tabela.add(new TabelaTokens(ant, tokens.buscarToken(ant), "valido", l, c, true));
-                    res += ant + " " + tokens.buscarToken(ant) + "\n";
+                    tk = tokens.buscarToken(ant);
+                    tabela.add(new TabelaTokens(ant, tk, "valido", l, c - ant.length(), true));
+                    res += ant + " " + tk + "\n";
                     i = i - (aux.length() - ant.length());
                     if(str.charAt(i + 1) == ' ')
                         i++;
@@ -65,6 +69,7 @@ public class Lexica {
                     aux = str.charAt(i) + "";
                     while(i < str.length() && (!tokens.contemSimbolo(aux) || (i > 2 && (aux.equals("+") || aux.equals("-")) && ant.charAt(ant.length() - 1) == 'E' && isNumber(ant.charAt(ant.length() - 2)) )) && !aux.equals(" "))
                     {
+                        c++;
                         ant += str.charAt(i);
                         i++;
                         aux = str.charAt(i) + "";
@@ -73,20 +78,22 @@ public class Lexica {
                         aux = "";
                     }
                     //GUARDAR IDENTIFICADOR
-                    tabela.add(new TabelaTokens(ant, tratarIdentificador(ant), "valido", l, c, true));
-                    res += ant + " " + tratarIdentificador(ant) + "\n";
+                    identificador = tratarIdentificador(ant);
+                    tabela.add(new TabelaTokens(ant, identificador, "valido", l, c - ant.length(), true));
+                    res += ant + " " + identificador + "\n";
                     
                 }
             }
             else if(aux.contains("℡"))
             {
                 aux = ant;
-                c = 1;
+                c = -1;
                 l++;
             }
             else if(aux.charAt(0) == ' ')
             {
                 aux = "";
+                c++;
             }
             else
             {

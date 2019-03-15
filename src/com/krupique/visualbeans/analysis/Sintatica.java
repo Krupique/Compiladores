@@ -26,7 +26,7 @@ public class Sintatica {
         listVariaveis = new ArrayList<String>();
         
         String aux = codigo.replaceAll("\n", " ℡ "); //Substitui todos os "\n" por ℡ (Serve para a análise léxica).
-        codigo = codigo.replaceAll("\\s*\n+", "\n").replaceAll(" +", " ").replaceAll("\t", "      "); //Substitui todas as ocorrências de um ou mais "\n" por um único "\n", depois remove todos os espaços extras e por fim substitui todos os tabs por 6 espaços.
+        codigo = codigo.replaceAll("\\s*\n+", "\n");//.replaceAll(" +", " ");//.replaceAll("\t", "      "); //Substitui todas as ocorrências de um ou mais "\n" por um único "\n", depois remove todos os espaços extras e por fim substitui todos os tabs por 6 espaços.
         
         Lexica lexica = new Lexica(aux);
         objaux = lexica.gerarAnalise();
@@ -35,10 +35,12 @@ public class Sintatica {
         for (int j = 0; j < tabela.size(); j++) {
             if(tabela.get(j).getToken().equals("identificador"))
                 listVariaveis.add(tabela.get(j).getPalavra());
+            
+            System.out.println(tabela.get(j).getPalavra() + " linha: " + tabela.get(j).getLinha() + " coluna: " + tabela.get(j).getColuna());
         }
         
         
-        identificarProgram();
+        //identificarProgram();
         
         for (int j = 0; j < tabela.size(); j++) {
             if(!tabela.get(j).getEstado())
@@ -103,6 +105,8 @@ public class Sintatica {
             
             identificarBloco(i);
         }
+        else
+            tabela.get(0).setLogEstado("[Erro]: Declaração inválida!", false);
         
     }
     
@@ -128,13 +132,18 @@ public class Sintatica {
             pos = identificarStatement(pos);
         
             if(pos >= tabela.size())
+            {
                 pos--;
-            
-            pilha.push(tabela.get(pos++).getToken());
-            if(pilha.getTl() < 2)
-                tabela.get(auxpos).setLogEstado("[Erro]: Você deveria ter declarado abrir chaves!", false);
-            if(!pilha.pop().equals("tk_fechar_chaves"))
-                tabela.get(pos - 1).setLogEstado("[Erro]: Fechar chaves declarado incorretamente!", false);
+                tabela.get(pos).setLogEstado("[Erro]: Não foi declarado fechar chaves!", false);
+            }
+            else
+            {
+                pilha.push(tabela.get(pos++).getToken());
+                if(pilha.getTl() < 2)
+                    tabela.get(auxpos).setLogEstado("[Erro]: Você deveria ter declarado abrir chaves!", false);
+                if(!pilha.pop().equals("tk_fechar_chaves"))
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Fechar chaves declarado incorretamente!", false);            
+            }
             
         }
         return pos;
@@ -216,11 +225,10 @@ public class Sintatica {
         auxpos = pos - 1;
         if(pos < tabela.size())
         {
-            pilha.push(tabela.get(pos).getToken());
+            pilha.push(tabela.get(pos++).getToken());
             
             if(pilha.getTl() == 3 && pilha.getTopPilha().equals("tk_ponto_virgula"))
             {
-                pos++;
                 if(!pilha.pop().equals("tk_ponto_virgula"))
                     tabela.get(pos - 1).setLogEstado("[Erro]: Declaração de ponto vírgula inválido!", false);
                 
@@ -254,6 +262,29 @@ public class Sintatica {
         return pos;
     }
 
+    private int validarVariaveis(int pos)
+    {
+        Pilha pilha = new Pilha();
+        int auxpos;
+        
+        while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
+            pilha.push(tabela.get(pos++).getToken());
+        
+        auxpos = pos - 1;
+        if(pos < tabela.size())
+        {
+            pilha.push(tabela.get(pos++).getToken());
+            //Pode ser simplesmente uma declaração.
+            //Pode ser uma declaração e uma atribuição.
+            //Pode ser uma declaração seguida de uma expressão matemática. 
+                //cuidado para(*=, /=, +=, -= e %=)
+        }
+        else
+        {
+            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+        }
+        return pos;
+    }
 }
     
     
