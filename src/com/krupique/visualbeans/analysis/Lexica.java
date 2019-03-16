@@ -32,12 +32,13 @@ public class Lexica {
         
         String str = texto;
         str = texto.replaceAll("\\@{1}.*\\@{1}", ""); //Remover comentarios
-        str = str.replace("(", " ( ").replace(")", " ) ").replace("[", " [ ").replace("]", " ] ").replace("{", " { ").replace("}", " } ").replace("++", " ++ ").replace("--", " -- ").replace("*", " * ").replace("/", " / ").replace("%", " % ").replace(";", " ; ").replace("&&", " && ").replace("||", " || ").replace("?", " ? ").replace("<<", " << ").replace(">>", " >> ");
+        str = str.replace("(", " ( ").replace(")", " ) ").replace("[", " [ ").replace("]", " ] ").replace("{", " { ").replace("}", " } ").replace("++", " ++ ").replace("--", " -- ").replace(";", " ; ").replace("&&", " && ").replace("||", " || ").replace("?", " ? ").replace("<<", " << ").replace(">>", " >> ").replace("+=", " += ").replace("-=", " -= ").replace("*=", " *= ").replace("/=", " /= ").replace("%=", " %= ");
+        str = str.replaceAll("\\+(?!=)(?!\\+)(?!\\ )", " + ").replaceAll("\\-(?!=)(?!\\+)(?!\\ )", " - ").replaceAll("\\*(?!=)", " * ").replaceAll("\\/(?!=)", " / ").replace("\\%(?!=)", " % "); //Validar as atribuições.
         str = str.replaceAll("\t", " "); //Removendo tabs.
         str = str.replaceAll("\\s+", " "); //Substitui todas as ocorrências de 2 ou mais espaços por um único.
         str = str.replaceAll("\\s*\\℡+", "℡").replaceAll("\\℡+", " ℡"); //Substitui todos os ℡ por um único. (Lembrando que: ℡ equivale ao \n).
         str = str.replaceAll("\\s+", " "); //Substitui todas as ocorrências de 2 ou mais espaços por um único.
-        str += " $"; //Indica final de cadeia.
+        str += " ;"; //Indica final de cadeia.
         
         System.out.println("REGEX: " + str);
         String res, ant, aux, identificador, tk;
@@ -115,7 +116,7 @@ public class Lexica {
         char aux = id.charAt(0);
         boolean flag;
         
-        if(aux > 47 && aux < 58 && id.length() > 1) //O primeiro caracter é número.
+        if(aux > 47 && aux < 58 && id.length() >= 1) //O primeiro caracter é número.
         {
             //Validar double
             if(id.contains(".") || id.contains("E")) //Pode ser double

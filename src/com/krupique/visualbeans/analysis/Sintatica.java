@@ -41,7 +41,7 @@ public class Sintatica {
         }
         
         
-        //identificarProgram();
+        identificarProgram();
         
         for (int j = 0; j < tabela.size(); j++) {
             if(!tabela.get(j).getEstado())
@@ -161,6 +161,7 @@ public class Sintatica {
         else if(flag == 2) //Expressão aritmética
         {
             System.out.println("Expressão aritmética");
+            pos = validarExpressaoAritmetica(pos);
         }
         else if(flag == 3) //Expressão comando (if, else, for ou while)
         {
@@ -305,8 +306,10 @@ public class Sintatica {
                     tabela.get(pos - 3).setLogEstado("[Erro]: Atribuição inválida!", false);
                 
                 String var = pilha.pop();
-                String tipo = pilha.pop();
+                if(!var.equals("identificador"))
+                    tabela.get(pos - 4).setLogEstado("[Erro]: Identificador inválido!", false);
                 
+                String tipo = pilha.pop();
                 validarValorTipo(tipo, var, valor, pos);
                 
             }
@@ -319,7 +322,7 @@ public class Sintatica {
                 int j = 2;
                 String valor = pilha.pop();
                 Pilha pinv = new Pilha();
-                while(!pilha.isEmpty() && !valor.equals("tk_atribuicao"))
+                while(!pilha.isEmpty() && !valor.equals("tk_atribuicao")) //Inverte a pilha.
                 {
                     pinv.push(valor);
                     valor = pilha.pop();
@@ -334,12 +337,13 @@ public class Sintatica {
                     if(!pilha.pop().equals("identificador"))
                         tabela.get(pos - j - 1).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
                     
-                    pilha.pop();
-                    validarExpressaoMatematica(pinv, j);
+                    
+                    String tipo = pilha.pop();
+                    validarExpressaoMatematica(pinv, pos - j + 1, tipo);
                 }
                 else
                 {
-                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Não foi encontrado o comando atribuição!", false);
                 }
             }
             
@@ -350,7 +354,7 @@ public class Sintatica {
         }
         else
         {
-            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Era esperado ponto e vírgula no final da operação!", false);
             pos--;
         }
         return pos;
@@ -426,16 +430,133 @@ public class Sintatica {
     //Análise Semântica
     private void validarVariavel(String tipo, int pos) 
     {
+        //Serve para validar se a variável pode receber outra variável.
+            //->Se são do mesmo tipo.
+            //->Se a variável possui valor.
         String var = tabela.get(pos).getPalavra();
     }
 
     //Análise Semântica
     private boolean validarDeclaracaoVar(String var) {
+        //Serve para validar se a variável já não foi declarada anteriormente.
         return true;
     }
+    
+    //Pega o tipo e retorna o valor daquele tipo. EX: tk_tipo_int -> valor_decimal
+    private String validarTipo(String tipo)
+    {
+        if(tipo.equals("tk_tipo_int"))
+            return "valor_decimal";
+        else if(tipo.equals("tk_tipo_double"))
+            return "valor_double";
+        else if(tipo.equals("tk_tipo_char"))
+            return "valor_char";
+        else if(tipo.equals("tk_tipo_string"))
+            return "valor_string";
+    
+        return "inválido";
+    }
 
-    private void validarExpressaoMatematica(Pilha pinv, int j) {
-        System.out.println("Expressão matemática!");
+    //Verifica se a expressão matemática é valida.
+    private void validarExpressaoMatematica(Pilha pinv, int j, String type) 
+    {
+        int flag, cont, auxj;
+        flag = cont = 0;
+        auxj = j;
+        String var, tipo;
+        
+        tipo = validarTipo(type);
+        
+        if(tipo.equals("valor_decimal") || tipo.equals("valor_double"))
+        {
+            while(!pinv.isEmpty())
+            {
+                var = pinv.pop();
+                if(flag == 0)
+                {
+                    if(var.equals("tk_abrir_parenteses"))
+                        cont++;
+                    else if(var.equals(tipo)) //numero
+                        flag = 1;
+                    else if(var.equals("identificador"))
+                    {
+                        //Na análise semântica ir na lista de variáveis e validar se:
+                            //-> São do mesmo tipo.
+                            //-> Se a variável tem valor atribuido a ela.
+                        flag = 1;
+                    }
+                    else{
+                        tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", false);
+                        
+                    }
+                    auxj++;
+                }
+                else if(flag == 1)
+                {
+                    if(var.equals("tk_fechar_parenteses"))
+                        cont--;
+                    else if(var.equals("tk_add") || var.equals("tk_sub") || var.equals("tk_mult") || var.equals("tk_div") || var.equals("tk_resto"))
+                        flag = 0;
+                    else{
+                        tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", false);
+                       
+                    }
+                    auxj++;
+                }
+            }
+            if(cont > 0)
+                tabela.get(auxj).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", false);
+            else if(cont < 0)
+                tabela.get(auxj).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", false);
+        }
+        else
+            tabela.get(auxj).setLogEstado("[Erro]: Operação inválida! Impossível realizar expressões com esse tipo de variável (" + type +")!", true);
+
+        System.out.println("Test");
+    }
+
+    private int validarExpressaoAritmetica(int pos) {
+        Pilha pilha, pinv;
+        pilha = new Pilha();
+        pinv = new Pilha();
+        String attrib;
+        int auxpos = pos, j;
+        
+        if(!tabela.get(pos).getToken().equals("identificador"))
+            tabela.get(pos).setLogEstado("[Erro]: Operação inválida!", false);
+        else
+        {
+            pos++;
+            attrib = tabela.get(pos).getToken();
+            
+            if(!(attrib.contains("atribuicao")))
+                tabela.get(pos).setLogEstado("[Erro]: Atribuição inválida!", false);
+            else
+            {
+                pos++;
+                j = pos;
+                while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
+                    pilha.push(tabela.get(pos++).getToken());
+                
+                if(pos < tabela.size())//Achou ponto e virgula.
+                {
+                    while(!pilha.isEmpty())
+                        pinv.push(pilha.pop());
+                    
+                    //Validar se identificador tem valor em caso de: (+=, -=, *=, /= e %=)
+                    //Validar tipo de identificador
+                    String tipo = "tk_tipo_int";
+                    validarExpressaoMatematica(pinv, j, tipo);
+                }
+                else
+                {
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Era esperado ponto e vírgula no final da operação!", false);
+                    pos -= 2;
+                }
+            }
+        }
+        pos++;
+        return pos;
     }
 }
     
