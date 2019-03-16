@@ -32,21 +32,20 @@ public class Lexica {
         
         String str = texto;
         str = texto.replaceAll("\\@{1}.*\\@{1}", ""); //Remover comentarios
-        str = str.replaceAll("\t", " ");
-        str = str.replaceAll("\\s+", " ");
-        str = str.replaceAll("\\s*\\℡+", "℡");
-        str = str.replaceAll("\\℡+", " ℡");
-        str = str.replaceAll("\\s+", " ");
-        str += " ;";
-        System.out.println("REGEX: " + str);
-        String res = "";
-        String ant = "";
-        String aux = "";
-        String identificador;
-        String tk;
-        int l = 1, c = 0;
+        str = str.replace("(", " ( ").replace(")", " ) ").replace("[", " [ ").replace("]", " ] ").replace("{", " { ").replace("}", " } ").replace("++", " ++ ").replace("--", " -- ").replace("*", " * ").replace("/", " / ").replace("%", " % ").replace(";", " ; ").replace("&&", " && ").replace("||", " || ").replace("?", " ? ").replace("<<", " << ").replace(">>", " >> ");
+        str = str.replaceAll("\t", " "); //Removendo tabs.
+        str = str.replaceAll("\\s+", " "); //Substitui todas as ocorrências de 2 ou mais espaços por um único.
+        str = str.replaceAll("\\s*\\℡+", "℡").replaceAll("\\℡+", " ℡"); //Substitui todos os ℡ por um único. (Lembrando que: ℡ equivale ao \n).
+        str = str.replaceAll("\\s+", " "); //Substitui todas as ocorrências de 2 ou mais espaços por um único.
+        str += " $"; //Indica final de cadeia.
         
-        for (int i = 0; i < str.length(); i++) {
+        System.out.println("REGEX: " + str);
+        String res, ant, aux, identificador, tk;
+        int l = 1, c = 0;
+        res = ant = aux = "";
+        
+        for (int i = 0; i < str.length(); i++)//Percorre toda a string. 
+        {
             ant = aux;
             aux += str.charAt(i);
             c++;
@@ -116,7 +115,7 @@ public class Lexica {
         char aux = id.charAt(0);
         boolean flag;
         
-        if(aux > 47 && aux < 58 && id.length() > 1)
+        if(aux > 47 && aux < 58 && id.length() > 1) //O primeiro caracter é número.
         {
             //Validar double
             if(id.contains(".") || id.contains("E")) //Pode ser double
@@ -144,7 +143,7 @@ public class Lexica {
                 }
             }
         }
-        else if(aux == 'o' && id.length() > 1)
+        else if(aux == 'o' && id.length() > 1) //O primeiro caracter é o.
         {
             i = 1;
             flag = true;
@@ -162,7 +161,7 @@ public class Lexica {
         
             return "invalido";
         }
-        else if(aux == 'x' && id.length() > 1)
+        else if(aux == 'x' && id.length() > 1) //O primeiro caracter é x.
         {
             i = 1;
             flag = true;
@@ -180,26 +179,27 @@ public class Lexica {
         
             return "invalido";
         }
-        else if(aux == '"')
+        else if(aux == '"') //O primeiro caracter é ".
         {
             aux = id.charAt(id.length() - 1);
             if(aux == '"')
                 return "valor_string";
             return "string_invalida";
         }
-        else if(aux =='\'')
+        else if(aux =='\'') //O primeiro caracter é '.
         {
             aux = id.charAt(id.length() - 1);
             if(aux == '\'' && id.length() == 3)
                 return "valor_char";
             return "char_invalido";     
         }
-        else if(isIdentificador(id))
+        else if(isIdentificador(id)) //Valida se é identificador.
             return "identificador";
         
         return "invalido";
     }
     
+    //Validar se é identificador.
     private boolean isIdentificador(String str)
     {
         char aux = str.charAt(0);
@@ -215,12 +215,14 @@ public class Lexica {
         return false;
     }
 
+    //Validar se é letra.
     private boolean isLetra(String aux, int i) {
         if((aux.charAt(i) > 64 && aux.charAt(i) < 91) || (aux.charAt(i) > 96 && aux.charAt(i) < 123))
             return true;
         return false;
     }
 
+    //Validar se é número.
     private boolean isNumber(char letra) {
         if(letra > 47 && letra < 58)
             return true;

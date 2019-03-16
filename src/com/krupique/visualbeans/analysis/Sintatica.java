@@ -1,5 +1,6 @@
 package com.krupique.visualbeans.analysis;
 
+import com.krupique.visualbeans.structures.ListaVariaveis;
 import com.krupique.visualbeans.structures.Pilha;
 import com.krupique.visualbeans.structures.TabelaTokens;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Sintatica {
     private Pilha pilha;
     private int i;
     private ArrayList<TabelaTokens> tabela;
-    private ArrayList<String> listVariaveis;
+    private ArrayList<ListaVariaveis> listVariaveis;
     
     public Sintatica(String codigo){
         this.codigo = codigo;
@@ -23,7 +24,7 @@ public class Sintatica {
     {   
         Object[] obj = new Object[3];
         Object[] objaux;
-        listVariaveis = new ArrayList<String>();
+        listVariaveis = new ArrayList<ListaVariaveis>();
         
         String aux = codigo.replaceAll("\n", " ℡ "); //Substitui todos os "\n" por ℡ (Serve para a análise léxica).
         codigo = codigo.replaceAll("\\s*\n+", "\n");//.replaceAll(" +", " ");//.replaceAll("\t", "      "); //Substitui todas as ocorrências de um ou mais "\n" por um único "\n", depois remove todos os espaços extras e por fim substitui todos os tabs por 6 espaços.
@@ -34,13 +35,13 @@ public class Sintatica {
         tabela = (ArrayList<TabelaTokens>)objaux[1];
         for (int j = 0; j < tabela.size(); j++) {
             if(tabela.get(j).getToken().equals("identificador"))
-                listVariaveis.add(tabela.get(j).getPalavra());
+                listVariaveis.add(new ListaVariaveis(tabela.get(j).getPalavra()));
             
             System.out.println(tabela.get(j).getPalavra() + " linha: " + tabela.get(j).getLinha() + " coluna: " + tabela.get(j).getColuna());
         }
         
         
-        identificarProgram();
+        //identificarProgram();
         
         for (int j = 0; j < tabela.size(); j++) {
             if(!tabela.get(j).getEstado())
@@ -50,7 +51,7 @@ public class Sintatica {
         }
         
         for (int j = 0; j < listVariaveis.size(); j++) {
-            System.out.println("VAR: " + listVariaveis.get(j));
+            System.out.println("VAR: " + listVariaveis.get(j).getNome());
         }
         
         obj[0] = objaux[0];
@@ -277,7 +278,7 @@ public class Sintatica {
         if(pos < tabela.size())
         {
             pilha.push(tabela.get(pos++).getToken());
-            if(pilha.getTl() < 3) //Está errado.
+            if(pilha.getTl() < 3 || pilha.getTl() == 4) //Está errado.
             {
                 if(pilha.pop().equals("tk_ponto_virgula"))
                     tabela.get(pos - 1).setLogEstado("[Erro]: Está faltando parâmetros na declaração!", false);
@@ -286,19 +287,60 @@ public class Sintatica {
             }
             else if(pilha.getTl() == 3) //Deve ser uma simples declaração.
             {
+                //Fazer a validação ser a variável já foi declarada anteriormente.
+                
                 if(!pilha.pop().equals("tk_ponto_virgula"))
                     tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
                 if(!pilha.pop().equals("identificador"))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: Identificador declarado incorretamente", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
                 pilha.pop();
             }
-            else if(pilha.getTl() == 4) //Deve ser uma declaração e uma atribuição.
+            else if(pilha.getTl() == 5) //Deve ser uma declaração e uma atribuição.
             {
+                if(!pilha.pop().equals("tk_ponto_virgula"))
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
+                String valor = pilha.pop();
+                
+                if(!pilha.pop().equals("tk_atribuicao"))
+                    tabela.get(pos - 3).setLogEstado("[Erro]: Atribuição inválida!", false);
+                
+                String var = pilha.pop();
+                String tipo = pilha.pop();
+                
+                validarValorTipo(tipo, var, valor, pos);
                 
             }
-            else //Deve ser uma declaração seguida de uma atribuição.
+            else //Deve ser uma declaração seguida de uma expressão aritmética.
             {
+                if(!pilha.pop().equals("tk_ponto_virgula"))
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
                 
+                
+                int j = 2;
+                String valor = pilha.pop();
+                Pilha pinv = new Pilha();
+                while(!pilha.isEmpty() && !valor.equals("tk_atribuicao"))
+                {
+                    pinv.push(valor);
+                    valor = pilha.pop();
+                    j++;
+                }
+                
+                if(!pilha.isEmpty())
+                {
+                    if(!valor.equals("tk_atribuicao"))
+                        tabela.get(pos - j).setLogEstado("[Erro]: Atribuição inválida!", false);
+                    
+                    if(!pilha.pop().equals("identificador"))
+                        tabela.get(pos - j - 1).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
+                    
+                    pilha.pop();
+                    validarExpressaoMatematica(pinv, j);
+                }
+                else
+                {
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+                }
             }
             
             
@@ -312,6 +354,88 @@ public class Sintatica {
             pos--;
         }
         return pos;
+    }
+
+    private void validarValorTipo(String tipo, String var, String valor, int pos) {
+        if(validarDeclaracaoVar(var)) //Fazer essa função na análise semântica
+        {
+            if(tipo.equals("tk_tipo_int"))
+            {
+                if(valor.equals("identificador"))
+                {
+                    //validar identificador.
+                    //validarVariavel("tk_tipo_int", pos - 2);
+                }
+                else if(!(valor.equals("valor_decimal") || valor.equals("valor_octal") || valor.equals("valor_hexadecimal")))
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor inteiro!", false);
+
+            }
+            else if(tipo.equals("tk_tipo_char"))
+            {
+                if(valor.equals("identificador"))
+                {
+                    //validar identificador.
+                    //validarVariavel("tk_tipo_char", pos - 2);
+                }
+                else if(!valor.equals("valor_char"))
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um caracter entre ''!", false);
+            }
+            else if(tipo.equals("tk_tipo_double"))
+            {
+                if(valor.equals("identificador"))
+                {
+                    //validar identificador.
+                    //validarVariavel("tk_tipo_double", pos - 2);
+                }
+                else if(!(valor.equals("valor_double") || valor.equals("valor_decimal")))
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor inteiro ou de ponto flutante!", false);
+            }
+            else if(tipo.equals("tk_tipo_bool"))
+            {
+                if(valor.equals("identificador"))
+                {
+                    //validar identificador.
+                    //validarVariavel("tk_tipo_bool", pos - 2);
+                }
+                else if(!(valor.equals("tk_afirmacao_false") || valor.equals("tk_afirmacao_true")))
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor booleano!", false);
+            }
+            else if(tipo.equals("tk_tipo_string"))
+            {
+                if(valor.equals("identificador"))
+                {
+                    //validar identificador.
+                    //validarVariavel("tk_tipo_string", pos - 2);
+                }
+                else if(!valor.equals("valor_string"))
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um ou mais caracteres entre \"\"", false);
+            }
+            else //Erro de tipo
+            {
+                tabela.get(pos - 4).setLogEstado("[Erro]: Tipo de variável declarado incorretamente!", false);
+            }
+        }
+        else //Erro na declaração de variável
+        {
+            tabela.get(pos - 3).setLogEstado("[Erro]: A variável já foi declarada anteriormente!", false);
+        }
+        
+    }
+
+    
+    //Análise Semântica
+    private void validarVariavel(String tipo, int pos) 
+    {
+        String var = tabela.get(pos).getPalavra();
+    }
+
+    //Análise Semântica
+    private boolean validarDeclaracaoVar(String var) {
+        return true;
+    }
+
+    private void validarExpressaoMatematica(Pilha pinv, int j) {
+        System.out.println("Expressão matemática!");
     }
 }
     

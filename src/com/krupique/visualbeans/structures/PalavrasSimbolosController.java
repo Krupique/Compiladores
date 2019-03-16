@@ -30,6 +30,10 @@ public class PalavrasSimbolosController {
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("]", "fechamento de conchetes", "tk_fechar_conchetes");
         listSimbolos.add(simbolos);
+        simbolos = new SimbolosReservados("(", "abertura de parenteses", "tk_abrir_parenteses");
+        listSimbolos.add(simbolos);
+        simbolos = new SimbolosReservados(")", "fechamento de parenteses", "tk_fechar_parenteses");
+        listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("{", "abertura de chaves", "tk_abrir_chaves");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("}", "fechamento de chaves", "tk_fechar_chaves");
