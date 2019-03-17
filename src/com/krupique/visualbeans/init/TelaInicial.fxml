@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -106,6 +107,7 @@
                               <AnchorPane>
                                  <children>
                                     <CodeArea prefHeight="336.0" prefWidth="770.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                    <Label layoutX="296.0" layoutY="112.0" text="Label" />
                                  </children>
                               </AnchorPane>
                            </content>

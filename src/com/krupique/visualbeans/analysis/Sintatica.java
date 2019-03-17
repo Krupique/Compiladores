@@ -129,6 +129,11 @@ public class Sintatica {
             pos = identificarBloco(pos);
         else if(prox == 1)
             pos = identificarStatement(pos);
+        else if(prox == -1)
+        {
+            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
+            pos = identificarStatement(pos);
+        }
         
         return pos;
     }
@@ -161,7 +166,7 @@ public class Sintatica {
             System.out.println("Operação post inc/dec");
             pos = validarIncDec(pos, 2);
         }
-        else //ERRO
+        else if(!tabela.get(pos).getToken().equals("tk_fechar_chaves"))//ERRO
         {
             tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
         }
@@ -172,8 +177,11 @@ public class Sintatica {
             pos = identificarBloco(pos);
         else if(prox == 1)
             pos = identificarStatement(pos);
-        else
+        else if(prox == -1) //Achou coisas que não fazem sentido
+        {
            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
+           pos = identificarStatement(pos);
+        }
         
         return pos;
     }
@@ -186,10 +194,11 @@ public class Sintatica {
                 return 0; //É bloco
             else if(qualStatement(pos) != -1)
                 return 1; //É statement
-            else
-                return -1; //É erro
+            else if(tabela.get(pos).getToken().equals("tk_fechar_chaves"))
+                return 2; //É fechar chaves
+            return -1;
         }
-        return -1;
+        return -2;
     }
 
     private int qualStatement(int pos)
@@ -330,8 +339,19 @@ public class Sintatica {
                     if(!pilha.pop().equals("identificador"))
                         tabela.get(pos - j - 1).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
                     
-                    
-                    String tipo = pilha.pop();
+                    String tipo;
+                    if(pilha.getTl() == 1)
+                        tipo = pilha.pop();
+                    else
+                    {
+                        int k = 0;
+                        while(pilha.getTl() > 1)
+                        {
+                            tabela.get(pos - j - k++).setLogEstado("[Erro]: Parâmetros exdentes na operação!", false);
+                            pilha.pop();
+                        }
+                        tipo = pilha.pop();
+                    }
                     validarExpressaoMatematica(pinv, pos - j + 1, tipo);
                 }
                 else

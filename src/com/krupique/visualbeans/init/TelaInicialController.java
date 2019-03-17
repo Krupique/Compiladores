@@ -363,4 +363,24 @@ public class TelaInicialController implements Initializable {
         textSintatico.setText(str);
         
     }
+
+    @FXML
+    private void evtTemaDark(ActionEvent event) {
+    }
+
+    @FXML
+    private void evtTemaLight(ActionEvent event) {
+    }
+
+    @FXML
+    private void evtTelaBNF(ActionEvent event) {
+    }
+
+    @FXML
+    private void evtTelaFirstFollow(ActionEvent event) {
+    }
+
+    @FXML
+    private void evtTelaSobre(ActionEvent event) {
+    }
 }
