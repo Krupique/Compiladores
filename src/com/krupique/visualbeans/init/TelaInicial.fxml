@@ -61,12 +61,19 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Ferramentas">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Personalizar" />
+                  <Menu mnemonicParsing="false" text="Tema">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#evtTemaDark" text="Dark" />
+                        <MenuItem mnemonicParsing="false" onAction="#evtTemaLight" text="Light" />
+                    </items>
+                  </Menu>
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Ajuda">
             <items>
-              <MenuItem mnemonicParsing="false" text="Sobre" />
+              <MenuItem mnemonicParsing="false" onAction="#evtTelaBNF" text="BNF" />
+                  <MenuItem mnemonicParsing="false" onAction="#evtTelaFirstFollow" text="First e Follow" />
+                  <MenuItem mnemonicParsing="false" onAction="#evtTelaSobre" text="Sobre" />
             </items>
           </Menu>
         </menus>
@@ -113,14 +120,17 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <JFXTextArea fx:id="textLexico" editable="false" focusColor="#34333a" layoutX="14.0" layoutY="16.0" prefHeight="206.0" prefWidth="760.0" promptText="Remover o CSS do Scenebuilder" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                          <JFXTextArea fx:id="textLexico" editable="false" focusColor="#34333a" layoutX="14.0" layoutY="16.0" prefHeight="206.0" prefWidth="760.0" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                        </children>
                                     </AnchorPane>
                                  </content>
                               </Tab>
                               <Tab text="Análise Sintática">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <JFXTextArea fx:id="textSintatico" editable="false" focusColor="#34333a" prefHeight="206.0" prefWidth="760.0" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                       </children></AnchorPane>
                                 </content>
                               </Tab>
                               <Tab text="Análise Semântica">
@@ -140,13 +150,13 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <TableView layoutX="14.0" layoutY="14.0" prefHeight="581.0" prefWidth="280.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                          <TableView fx:id="tbvTokens" layoutX="14.0" layoutY="14.0" prefHeight="581.0" prefWidth="280.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                             <columns>
-                                              <TableColumn prefWidth="66.0" text="Palavra" />
-                                              <TableColumn prefWidth="75.0" text="Token" />
-                                                <TableColumn prefWidth="50.0" text="Estado" />
-                                                <TableColumn prefWidth="44.0" text="Linha" />
-                                                <TableColumn prefWidth="44.0" text="Coluna" />
+                                              <TableColumn fx:id="clPalavra" prefWidth="66.0" text="Palavra" />
+                                              <TableColumn fx:id="clToken" prefWidth="75.0" text="Token" />
+                                                <TableColumn fx:id="clEstado" prefWidth="50.0" text="Estado" />
+                                                <TableColumn fx:id="clLinha" prefWidth="44.0" text="Linha" />
+                                                <TableColumn fx:id="clColuna" prefWidth="44.0" text="Coluna" />
                                             </columns>
                                           </TableView>
                                        </children>

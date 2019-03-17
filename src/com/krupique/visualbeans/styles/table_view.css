@@ -1,0 +1,92 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16/03/2019, 22:52:49
+    Author     : Henrique K. Secchi
+*/
+
+
+.table-view {
+    -fx-table-color: purple; /*Selecionar linha*/
+    -fx-background-color: #232229; /*Cor de fundo, sem dados na tabela*/
+    -fx-border-color: #34333A;
+    -fx-border-color: transparent;
+}
+
+.table-view:focused .table-row-cell:selected .table-cell {
+    -fx-text-fill: #232229; /*Cor da letra selecionada*/
+}
+
+.table-view .column-header,
+.table-view .column-header-background,
+.table-view .column-header-background .filler {
+    -fx-background-color: #121118; /*Cor de fundo do cabeçalho*/
+}
+
+.table-view .column-header { 
+    /*Bordas do cabeçalho*/
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #34333A;
+}
+
+.table-view .column-header .label { 
+    /*Texto do cabeçalho*/
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 5 0 5 0;
+}
+
+.table-view .column-header .arrow, .table-view .column-header .sort-order-dot { 
+    /*Seta ao selecionar uma coluna do cabeçalho*/
+    -fx-background-color: #FFFFFF;
+}
+
+.table-view .column-header-background {
+    /*Borda da tabela, sem contar o cabeçalho*/
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: #34333A;
+}
+
+.table-view .table-cell {
+    /*Tamanho da tabela, nesse caso a altura*/
+    -fx-padding: 4 2 4 2; /*Distância da letra em relação à borda*/
+    -fx-text-fill: #FFFFFF; /*Cor da fonte das linhas da tabela*/
+    -fx-font-weight: bold;
+}
+
+.table-view .column-resize-line, .table-view .column-drag-header {
+    /*Cor e efeitos ao mover uma linha*/
+    -fx-background-color: #56555B;
+}
+
+.table-view:focused {
+    /*Cores e efeitos ao clicar e selecionar o tableview*/
+    -fx-background-color: #34333A, #34333A, #232229;
+    -fx-background-insets: -1.4, 0, 1;
+    -fx-background-radius: 1.4, 0, 0;
+    /*....*/
+    -fx-padding: 1; /* 0.083333em; */
+}
+
+/*-------------- Parte das linhas ---------------*/
+.table-row-cell{
+    -fx-background-color: #232229, #232229;
+    -fx-table-cell-border-color: #232229;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #34333A, #34333A;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */  
+}
+
+.table-view:focused .table-row-cell:selected {
+    -fx-background-color: #BABBCF;
+    -fx-table-cell-border-color: #BABBCF;
+    -fx-text-fill: #232229;
+    -fx-font-weight: bold;
+}

@@ -4,9 +4,9 @@
 */
 
 .menu-bar{
-  -fx-background-color: #34333A;
-  -fx-border-color:  #232229;
- -fx-border-width: 1
+    -fx-background-color: #34333A;
+    -fx-border-color:  #232229;
+    -fx-border-width: 1
 }
 
 .menu-bar .label {
@@ -61,12 +61,13 @@
     -fx-text-fill: white;
 }
 
-#textLexico
+#textLexico, #textSintatico
 {
-    -fx-background-color: #45444B;
+    -fx-background-color: #232229;
     -fx-prompt-text-fill: white;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-padding: 0 0 0 5;
 }
 
 #ancAnalyzes, #ancTabTokens
@@ -78,5 +79,3 @@
 {
     -fx-background-color: #34333A;
 }
-
-

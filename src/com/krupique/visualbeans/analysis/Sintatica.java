@@ -22,7 +22,7 @@ public class Sintatica {
     
     public Object[] analisar()
     {   
-        Object[] obj = new Object[3];
+        Object[] obj = new Object[4];
         Object[] objaux;
         listVariaveis = new ArrayList<ListaVariaveis>();
         
@@ -30,47 +30,23 @@ public class Sintatica {
         codigo = codigo.replaceAll("\\s*\n+", "\n");//.replaceAll(" +", " ");//.replaceAll("\t", "      "); //Substitui todas as ocorrências de um ou mais "\n" por um único "\n", depois remove todos os espaços extras e por fim substitui todos os tabs por 6 espaços.
         
         Lexica lexica = new Lexica(aux);
-        objaux = lexica.gerarAnalise();
+        objaux = lexica.gerarAnalise(); //Faz a análise léxica
         
         tabela = (ArrayList<TabelaTokens>)objaux[1];
         for (int j = 0; j < tabela.size(); j++) {
             if(tabela.get(j).getToken().equals("identificador"))
                 listVariaveis.add(new ListaVariaveis(tabela.get(j).getPalavra()));
-            
-            System.out.println(tabela.get(j).getPalavra() + " linha: " + tabela.get(j).getLinha() + " coluna: " + tabela.get(j).getColuna());
         }
         
+        identificarProgram(); //Faz a análise sintática.
         
-        identificarProgram();
-        
-        for (int j = 0; j < tabela.size(); j++) {
-            if(!tabela.get(j).getEstado())
-            {
-                System.out.println("Erro: " + tabela.get(j).getLog()+ " linha: " + tabela.get(j).getLinha());
-            }
-        }
-        
-        for (int j = 0; j < listVariaveis.size(); j++) {
-            System.out.println("VAR: " + listVariaveis.get(j).getNome());
-        }
-        
-        obj[0] = objaux[0];
-        obj[1] = objaux[1];
-        obj[2] = codigo;
+        //Empacota os dados em um vetor de objetos. Famoso MVC.
+        obj[0] = objaux[0]; //Texto léxico.
+        obj[1] = tabela; //Tabela com a informação sobre todos os tokens.
+        obj[2] = codigo; //Texto formatado. (Foram removidos os espaços e \n's sobressalente)
+        obj[3] = listVariaveis; //Lista com todas as variáveis. (Serve para a análise semântica).
         return obj;
     }
-    
-    //Identificar program (não é rec)
-    //Identificar bloco (não é rec)
-    //Identificar statements (chama identificar bloco)
-        //-> Declaração de variáveis.
-                //-> expressões aritméticas.
-        //-> Chamar expressões
-                //-> if
-                    //-> if-else.
-                //-> while.
-                //-> for.
-        //-> Expressões de pre e post inc/dec
     
     private void identificarProgram()
     {
@@ -147,6 +123,13 @@ public class Sintatica {
             }
             
         }
+        //Valida pra ver se nao tem nada pra baixo.
+        int prox = isStatOrBlock(pos);
+        if(prox == 0)
+            pos = identificarBloco(pos);
+        else if(prox == 1)
+            pos = identificarStatement(pos);
+        
         return pos;
     }
 
@@ -166,6 +149,7 @@ public class Sintatica {
         else if(flag == 3) //Expressão comando (if, else, for ou while)
         {
             System.out.println("Expressão comando");
+            pos = validarComando(pos);
         }
         else if(flag == 4) //Operação pre incremento/decremento
         {
@@ -179,28 +163,37 @@ public class Sintatica {
         }
         else //ERRO
         {
-            
-            //Pensar nisso aqui depois
-            /*if(isStatOrBlock(++pos) == 1)
-                identificarBloco(pos);
-            else
-                identificarStatement(pos);*/
+            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
         }
+        
+        //Valida para ver se nao tem nada pra baixo.
+        int prox = isStatOrBlock(pos);
+        if(prox == 0)
+            pos = identificarBloco(pos);
+        else if(prox == 1)
+            pos = identificarStatement(pos);
+        else
+           tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
         
         return pos;
     }
     
     private int isStatOrBlock(int pos)
     {
-        if(tabela.get(pos).getToken().equals("tk_abrir_chaves"))
-            return 0; //É bloco
-        else if(qualStatement(pos) != -1)
-            return 1; //É statement
-        else
-            return -1; //É erro
+        if(pos < tabela.size())
+        {
+            if(tabela.get(pos).getToken().equals("tk_abrir_chaves"))
+                return 0; //É bloco
+            else if(qualStatement(pos) != -1)
+                return 1; //É statement
+            else
+                return -1; //É erro
+        }
+        return -1;
     }
 
-    private int qualStatement(int pos) {
+    private int qualStatement(int pos)
+    {
         String token = tabela.get(pos).getToken();
         
         if(token.equals("tk_tipo_int") || token.equals("tk_tipo_char") || token.equals("tk_tipo_bool") || token.equals("tk_tipo_double") || token.equals("tk_tipo_string"))
@@ -360,7 +353,8 @@ public class Sintatica {
         return pos;
     }
 
-    private void validarValorTipo(String tipo, String var, String valor, int pos) {
+    private void validarValorTipo(String tipo, String var, String valor, int pos) 
+    {
         if(validarDeclaracaoVar(var)) //Fazer essa função na análise semântica
         {
             if(tipo.equals("tk_tipo_int"))
@@ -425,7 +419,6 @@ public class Sintatica {
         }
         
     }
-
     
     //Análise Semântica
     private void validarVariavel(String tipo, int pos) 
@@ -437,7 +430,8 @@ public class Sintatica {
     }
 
     //Análise Semântica
-    private boolean validarDeclaracaoVar(String var) {
+    private boolean validarDeclaracaoVar(String var) 
+    {
         //Serve para validar se a variável já não foi declarada anteriormente.
         return true;
     }
@@ -557,6 +551,118 @@ public class Sintatica {
         }
         pos++;
         return pos;
+    }
+
+    private int validarComando(int pos) {
+        Pilha pilha = new Pilha();
+        Pilha pinv = new Pilha();
+        int cont = 0, auxpos;
+        String token;
+        
+        pos++;
+        auxpos = pos;
+        token = tabela.get(pos).getToken();
+        pilha.push(tabela.get(pos++).getToken());
+        
+        if(token.equals("tk_abrir_parenteses"))
+        {
+            cont++;
+            while(pos < tabela.size() && cont != 0)
+            {
+                if(tabela.get(pos).getToken().equals("tk_abrir_parenteses"))
+                    cont++;
+                else if(tabela.get(pos).getToken().equals("tk_fechar_parenteses"))
+                    cont--;
+            
+                pilha.push(tabela.get(pos++).getToken());
+            }
+            
+            if(pos < tabela.size())
+            {
+                while(!pilha.isEmpty())
+                    pinv.push(pilha.pop());
+                
+                validarOperacaoLogica(pinv, auxpos);
+            }
+            else
+            {
+                tabela.get(--pos).setLogEstado("[Erro]: Operação inválida!", false);
+            }
+            
+        }
+        else
+        {
+            tabela.get(pos - 1).setLogEstado("[Erro]: Erro na declaração de comando! Era esperado abrir parênteses!", false);
+        }
+        return pos;
+    }
+
+    private void validarOperacaoLogica(Pilha pilha, int auxj) {
+        String var;
+        int flag, cont;
+        flag = cont = 0;
+        
+        while(!pilha.isEmpty())
+        {
+            var = pilha.pop();
+            if(flag == 0)
+            {
+                if(var.equals("tk_abrir_parenteses"))
+                    cont++;
+                else if(var.contains("valor")) //é um valor (inteiro, double, string ou char)
+                    flag = 1;
+                else if(var.equals("identificador"))
+                {
+                    //Na análise semântica ir na lista de variáveis e validar se:
+                        //-> São do mesmo tipo.
+                        //-> Se a variável tem valor atribuido a ela.
+                    flag = 1;
+                }
+                else if(var.equals("tk_afirmacao_true") || var.equals("tk_afirmacao_false"))
+                {
+                    flag = 2;
+                }
+                else{
+                    tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", false);
+                    flag = 1;
+                }
+                auxj++;
+            }
+            else if(flag == 1)
+            {
+                if(var.equals("tk_fechar_parenteses"))
+                    cont--;
+                else if(var.equals("tk_add") || var.equals("tk_sub") || var.equals("tk_mult") || var.equals("tk_div") || var.equals("tk_resto"))
+                    flag = 0;
+                else if(var.equals("tk_and") || var.equals("tk_or") || var.equals("tk_igualdade") || var.equals("tk_diferenca") || var.equals("tk_menor") || var.equals("tk_maior") || var.equals("tk_menor_igual") || var.equals("tk_maior_igual"))
+                {
+                    flag = 0;
+                }
+                else{
+                    tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", false);
+                    flag = 0;
+                }
+                auxj++;
+            }
+            else if(flag == 2)
+            {
+                if(var.equals("tk_fechar_parenteses"))
+                    cont--;
+                else if(var.equals("tk_and") || var.equals("tk_or") || var.equals("tk_igualdade") || var.equals("tk_diferenca") || var.equals("tk_menor") || var.equals("tk_maior") || var.equals("tk_menor_igual") || var.equals("tk_maior_igual"))
+                    flag = 0;
+                else
+                {
+                    tabela.get(auxj).setLogEstado("[Erro]: Era esperado um operador de igualdede ou um operador lógico!", false);
+                    flag = 0;
+                }
+
+                auxj++;
+            }
+        }
+        if(cont > 0)
+            tabela.get(auxj).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", false);
+        else if(cont < 0)
+            tabela.get(auxj).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", false);
     }
 }
     

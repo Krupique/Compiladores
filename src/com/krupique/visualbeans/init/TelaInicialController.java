@@ -8,16 +8,25 @@ package com.krupique.visualbeans.init;
 import com.jfoenix.controls.JFXTextArea;
 import com.krupique.visualbeans.analysis.Lexica;
 import com.krupique.visualbeans.analysis.Sintatica;
+import com.krupique.visualbeans.structures.ListaVariaveis;
+import com.krupique.visualbeans.structures.TabelaTokens;
 import com.krupique.visualbeans.utils.Colors;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -78,14 +87,40 @@ public class TelaInicialController implements Initializable {
     private Lexica lexica;
     private String string;
     
+    private ArrayList<TabelaTokens> tabela;
+    @FXML
+    private TableColumn<String, String> clPalavra;
+    @FXML
+    private TableColumn<String, String> clToken;
+    @FXML
+    private TableColumn<String, String> clEstado;
+    @FXML
+    private TableColumn<Integer, Integer> clLinha;
+    @FXML
+    private TableColumn<Integer, Integer> clColuna;
+    @FXML
+    private TableView<TabelaTokens> tbvTokens;
+    @FXML
+    private JFXTextArea textSintatico;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        iniciarTableview();
         carragarImagens(1);
         carregarCss();
         
         string = "";
         listtabs = new ArrayList<Tab>();
     }    
+    
+    private void iniciarTableview()
+    {
+        clPalavra.setCellValueFactory(new PropertyValueFactory<>("palavra"));
+        clToken.setCellValueFactory(new PropertyValueFactory<>("token"));
+        clEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        clLinha.setCellValueFactory(new PropertyValueFactory<>("linha"));
+        clColuna.setCellValueFactory(new PropertyValueFactory<>("coluna"));
+    }
     
     public void carregarCss()
     {
@@ -98,6 +133,8 @@ public class TelaInicialController implements Initializable {
             corTheme = "";*/
         corTheme = "#777777";
         panePrincipal.getStylesheets().add("com/krupique/visualbeans/styles/main_theme.css");
+        
+        tbvTokens.getStylesheets().add("com/krupique/visualbeans/styles/table_view.css");
     }
 
     public void carragarImagens(int num)
@@ -274,18 +311,27 @@ public class TelaInicialController implements Initializable {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
        
-        Object[] obj = new Object[3];
-        //lexica = new Lexica(c.getText());
-        //lexica.gerarAnalise();
-        
-        Sintatica sintatica = new Sintatica(c.getText());
-        obj = sintatica.analisar();
-        //System.out.println("Foi por favor: " + c.getText());
-        //textoLexico = 
-        textLexico.setText((String)obj[0]);
-        c.replaceText((String)obj[2]);
-        Colors cor = new Colors(c);
-        //System.out.println("" + (String)obj[2]);
+        if(c.getText().length() > 0)
+        {
+            Object[] obj = new Object[4];
+
+            Sintatica sintatica = new Sintatica(c.getText());
+            obj = sintatica.analisar();
+
+
+            textLexico.setText((String)obj[0]);
+            adicionarAnaliseSintatica((ArrayList<TabelaTokens>)obj[1]);
+            adicionarNoTableview((ArrayList<TabelaTokens>)obj[1]);
+            
+            //c.replaceText((String)obj[2]);
+            //Colors cor = new Colors(c);
+            //System.out.println("" + (String)obj[2]);
+        }
+        else
+        {
+            Alert a = new Alert(Alert.AlertType.ERROR, "Não há texto para ser compilado! Por favor digite algum texto no campo de texto!", ButtonType.OK);
+            a.showAndWait();
+        }
     }
     
     public void completaTexto(KeyEvent event)
@@ -299,5 +345,22 @@ public class TelaInicialController implements Initializable {
         {
             string += '\n';
         }
+    }
+
+    private void adicionarNoTableview(ArrayList<TabelaTokens> list) {
+        ObservableList<TabelaTokens> obs;
+        obs = FXCollections.observableArrayList(list);
+        
+        tbvTokens.setItems(obs);
+    }
+
+    private void adicionarAnaliseSintatica(ArrayList<TabelaTokens> list) {
+        String str = "";
+        for (int i = 0; i < list.size(); i++) {
+            if(!list.get(i).getEstado())
+                str += list.get(i).getLog() + " Linha: " + list.get(i).getLinha() + " Coluna: " + list.get(i).getColuna() + "\n";
+        }
+        textSintatico.setText(str);
+        
     }
 }
