@@ -336,13 +336,14 @@ public class Sintatica {
                     if(!valor.equals("tk_atribuicao"))
                         tabela.get(pos - j).setLogEstado("[Erro]: Atribuição inválida!", false);
                     
-                    if(!pilha.pop().equals("identificador"))
+                    String auxstr = pilha.pop();
+                    if(!auxstr.equals("identificador"))
                         tabela.get(pos - j - 1).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
                     
                     String tipo;
                     if(pilha.getTl() == 1)
                         tipo = pilha.pop();
-                    else
+                    else if(pilha.getTl() > 1)
                     {
                         int k = 0;
                         while(pilha.getTl() > 1)
@@ -352,6 +353,8 @@ public class Sintatica {
                         }
                         tipo = pilha.pop();
                     }
+                    else
+                        tipo = auxstr;
                     validarExpressaoMatematica(pinv, pos - j + 1, tipo);
                 }
                 else
@@ -490,7 +493,7 @@ public class Sintatica {
                 {
                     if(var.equals("tk_abrir_parenteses"))
                         cont++;
-                    else if(var.equals(tipo)) //numero
+                    else if(var.equals(tipo) || var.equals("valor_decimal")) //numero
                         flag = 1;
                     else if(var.equals("identificador"))
                     {

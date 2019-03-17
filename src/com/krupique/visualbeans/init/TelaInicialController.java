@@ -11,6 +11,7 @@ import com.krupique.visualbeans.analysis.Sintatica;
 import com.krupique.visualbeans.structures.ListaVariaveis;
 import com.krupique.visualbeans.structures.TabelaTokens;
 import com.krupique.visualbeans.utils.Colors;
+import com.krupique.visualbeans.utils.Erros;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -106,11 +107,12 @@ public class TelaInicialController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         iniciarTableview();
-        carragarImagens(1);
+        carregarImagens(1);
         carregarCss();
         
         string = "";
         listtabs = new ArrayList<Tab>();
+        
     }    
     
     private void iniciarTableview()
@@ -137,7 +139,7 @@ public class TelaInicialController implements Initializable {
         tbvTokens.getStylesheets().add("com/krupique/visualbeans/styles/table_view.css");
     }
 
-    public void carragarImagens(int num)
+    public void carregarImagens(int num)
     {
         double escala = 0.8;
         
@@ -356,11 +358,29 @@ public class TelaInicialController implements Initializable {
 
     private void adicionarAnaliseSintatica(ArrayList<TabelaTokens> list) {
         String str = "";
+        AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
+        ArrayList<Erros> erros = new ArrayList<Erros>();
+        Erros erro;
+        int linha = 10;
+        for (int i = 1; i < p.getChildren().size(); i++) {
+            p.getChildren().remove(i);
+        }
+        
+        
+        Image img = new Image("com/krupique/visualbeans/resources/error.png");
         for (int i = 0; i < list.size(); i++) {
             if(!list.get(i).getEstado())
+            {
                 str += list.get(i).getLog() + " Linha: " + list.get(i).getLinha() + " Coluna: " + list.get(i).getColuna() + "\n";
+                erro = new Erros(new ImageView(img), 6, linha + (list.get(i).getLinha() - 1) * 15);
+                erros.add(erro);
+            }
         }
         textSintatico.setText(str);
+        
+        for (int i = 0; i < erros.size(); i++) {
+            p.getChildren().add(erros.get(i).getImg());
+        }
         
     }
 
