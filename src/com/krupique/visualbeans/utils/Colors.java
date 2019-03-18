@@ -14,11 +14,10 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
  */
 public class Colors {
     private CodeArea codeArea;
-    private String exampleString = "program exemplo;\n" +
+    private String exampleString =  "program exemplo;\n" +
                                     "{\n" +
                                     "	int x = 10; @Isto é um comentário@\n" +
                                     "	int y = 20;\n" +
-                                    "	string str = \"Henrique K.\";\n" +
                                     "	char cr = 'S';\n" +
                                     "	if(x < y)\n" +
                                     "	{\n" +
@@ -26,6 +25,13 @@ public class Colors {
                                     "		{\n" +
                                     "			++x;\n" +
                                     "			y = y * 10 / (x * 2);\n" +
+                                    "		}\n" +
+                                    "	}\n" +
+                                    "	else\n" +
+                                    "	{\n" +
+                                    "		for(int var; var < y; var++;)\n" +
+                                    "		{\n" +
+                                    "			x += 30 * 2;\n" +
                                     "		}\n" +
                                     "	}\n" +
                                     "}";

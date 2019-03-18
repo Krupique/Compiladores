@@ -364,10 +364,6 @@ public class TelaInicialController implements Initializable {
         ArrayList<Erros> erros = new ArrayList<Erros>();
         Erros erro;
         int linha = 10;
-        for (int i = 1; i < p.getChildren().size(); i++) {
-            p.getChildren().remove(i);
-        }
-        
         
         Image img = new Image("com/krupique/visualbeans/resources/error.png");
         for (int i = 0; i < list.size(); i++) {
@@ -378,12 +374,14 @@ public class TelaInicialController implements Initializable {
                 erros.add(erro);
             }
         }
-        textSintatico.setText(str);
         
-        for (int i = 0; i < erros.size(); i++) {
+        for (int i = 1; i < p.getChildren().size(); i++)
+            p.getChildren().remove(i);
+        
+        for (int i = 0; i < erros.size(); i++)
             p.getChildren().add(erros.get(i).getImg());
-        }
         
+        textSintatico.setText(str);
     }
 
     @FXML

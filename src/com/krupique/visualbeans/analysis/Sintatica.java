@@ -580,46 +580,211 @@ public class Sintatica {
         Pilha pilha = new Pilha();
         Pilha pinv = new Pilha();
         int cont = 0, auxpos;
-        String token;
+        String token = tabela.get(pos).getToken();
         
-        pos++;
-        auxpos = pos;
-        token = tabela.get(pos).getToken();
-        pilha.push(tabela.get(pos++).getToken());
-        
-        if(token.equals("tk_abrir_parenteses"))
+        if(token.equals("tk_comando_for"))
         {
-            cont++;
-            while(pos < tabela.size() && cont != 0)
+           pos = validarFor(pos);
+        }
+        else if(!token.equals("tk_comando_else"))
+        {
+            pos++;
+            auxpos = pos;
+            token = tabela.get(pos).getToken();
+            pilha.push(tabela.get(pos++).getToken());
+
+            if(token.equals("tk_abrir_parenteses"))
             {
-                if(tabela.get(pos).getToken().equals("tk_abrir_parenteses"))
-                    cont++;
-                else if(tabela.get(pos).getToken().equals("tk_fechar_parenteses"))
-                    cont--;
-            
-                pilha.push(tabela.get(pos++).getToken());
-            }
-            
-            if(pos < tabela.size())
-            {
-                while(!pilha.isEmpty())
-                    pinv.push(pilha.pop());
-                
-                validarOperacaoLogica(pinv, auxpos);
+                cont++;
+                while(pos < tabela.size() && cont != 0)
+                {
+                    if(tabela.get(pos).getToken().equals("tk_abrir_parenteses"))
+                        cont++;
+                    else if(tabela.get(pos).getToken().equals("tk_fechar_parenteses"))
+                        cont--;
+
+                    pilha.push(tabela.get(pos++).getToken());
+                }
+
+                if(pos < tabela.size())
+                {
+                    while(!pilha.isEmpty())
+                        pinv.push(pilha.pop());
+
+                    validarOperacaoLogica(pinv, auxpos);
+                }
+                else
+                {
+                    tabela.get(--pos).setLogEstado("[Erro]: Operação inválida!", false);
+                }
+
             }
             else
             {
-                tabela.get(--pos).setLogEstado("[Erro]: Operação inválida!", false);
+                tabela.get(pos - 1).setLogEstado("[Erro]: Erro na declaração de comando! Era esperado abrir parênteses!", false);
             }
             
         }
         else
         {
-            tabela.get(pos - 1).setLogEstado("[Erro]: Erro na declaração de comando! Era esperado abrir parênteses!", false);
+            int prox = isStatOrBlock(pos + 1);
+            if(prox == 0)
+            {
+                pos = identificarBloco(++pos);
+            }else if(prox == 1)
+            {
+                if(!tabela.get(pos + 1).equals("tk_comando_else"))
+                    pos = identificarStatement(++pos);
+                else
+                    tabela.get(pos + 1).setLogEstado("[Erro]: Não era esperado um else seguido de outro else!", false);
+            }
+            else
+                tabela.get(pos++).setLogEstado("[Erro]: Operação de else inválida!", false);
         }
         return pos;
     }
 
+    private int validarFor(int pos)    
+    {
+        Pilha p = new Pilha();
+        int aux, flag;
+        String token = tabela.get(++pos).getToken();
+        
+        if(token.equals("tk_abrir_parenteses"))
+        {
+            aux = ++pos;
+            while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
+                pos++;
+
+            if(pos < tabela.size())//for init
+            {
+                flag = qualStatement(aux);
+                if(flag == 1)
+                    aux = validarVariaveis(aux);
+                else if(flag == 2)
+                    aux = validarExpressaoAritmetica(aux);
+                else if(flag == 4)
+                    aux = validarIncDec(aux, 1);
+                else if(flag == 5)
+                    aux = validarIncDec(aux, 2);
+                else
+                    tabela.get(aux).setLogEstado("[Erro]: Operação inválida no primeiro parâmetro do for!", false);
+            
+                if(aux == pos + 1) //primeiro ; do for.
+                {
+                    aux = ++pos;
+                    while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
+                        pos++;
+                    
+                    if(pos < tabela.size()) //Verifica se pode continuar a verificar o for (segunda parte)
+                    {
+                        pos = validarLogicaFor(aux);
+                        if(pos < tabela.size() && tabela.get(pos).getToken().equals("tk_ponto_virgula")) //Verifica se voltou da segunda validação do for.
+                        {
+                            aux = ++pos;
+                            while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
+                                pos++;
+                            
+                            if(pos < tabela.size())
+                            {
+                                flag = qualStatement(aux);
+                                if(flag == 1)
+                                    aux = validarVariaveis(aux);
+                                else if(flag == 2)
+                                    aux = validarExpressaoAritmetica(aux);
+                                else if(flag == 4)
+                                    aux = validarIncDec(aux, 1);
+                                else if(flag == 5)
+                                    aux = validarIncDec(aux, 2);
+                                else
+                                    tabela.get(aux).setLogEstado("[Erro]: Operação inválida no terceiro parâmetro do for!", false);
+
+                                pos = aux;
+                                
+                                if(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_fechar_parenteses"))
+                                    tabela.get(pos).setLogEstado("[Erro]: Não foi encontrado a operação fechar parênteses!", false);
+                                
+                                return ++pos;
+                                
+                            }
+                            else
+                                tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no terceiro parâmetro do for!", false);   
+                            
+                        }
+                        else
+                            tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no terceiro parâmetro do for!", false);   
+                        
+                    }
+                    else
+                        tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no segundo parâmetro do for!", false);   
+                }
+            }
+            else
+                tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no primeiro parâmetro do for", false);
+        }
+        else
+            tabela.get(pos - 1).setLogEstado("[Erro]: Não foi encontrado abrir chaves!", false);
+
+        return pos;
+    }
+    
+    private int validarLogicaFor(int pos)
+    {
+        String token;
+        int flag = 0;
+        int cont = 0;
+        
+        while(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_ponto_virgula"))
+        {
+            token = tabela.get(pos).getToken();
+            if(flag == 0)
+            {
+                if(token.equals("tk_abrir_parenteses"))
+                    cont++;
+                else if(token.contains("valor")) //é um valor (inteiro, double, string ou char)
+                    flag = 1;
+                else if(token.equals("identificador"))
+                {
+                    //Na análise semântica ir na lista de variáveis e validar se:
+                        //-> São do mesmo tipo.
+                        //-> Se a variável tem valor atribuido a ela.
+                    flag = 1;
+                }
+                else if(token.equals("tk_afirmacao_true") || token.equals("tk_afirmacao_false"))
+                {
+                    flag = 1;
+                }
+                else{
+                    tabela.get(pos).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", false);
+                    flag = 1;
+                }
+                pos++;
+            }
+            else if(flag == 1)
+            {
+                if(token.equals("tk_fechar_parenteses"))
+                    cont--;
+                else if(token.equals("tk_and") || token.equals("tk_or") || token.equals("tk_igualdade") || token.equals("tk_diferenca") || token.equals("tk_menor") || token.equals("tk_maior") || token.equals("tk_menor_igual") || token.equals("tk_maior_igual"))
+                {
+                    flag = 0;
+                }
+                else{
+                    tabela.get(pos).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", false);
+                    flag = 0;
+                }
+                pos++;
+            }
+        }
+        
+        if(cont > 0)
+            tabela.get(pos).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", false);
+        else if(cont < 0)
+            tabela.get(pos).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", false);
+    
+    
+        return pos;
+    }
+    
     private void validarOperacaoLogica(Pilha pilha, int auxj) {
         String var;
         int flag, cont;

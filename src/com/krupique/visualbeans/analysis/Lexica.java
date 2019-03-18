@@ -40,7 +40,6 @@ public class Lexica {
         str = str.replaceAll("\\s+", " "); //Substitui todas as ocorrências de 2 ou mais espaços por um único.
         str += " ;"; //Indica final de cadeia.
         
-        System.out.println("REGEX: " + str);
         String res, ant, aux, identificador, tk;
         int l = 1, c = 0;
         res = ant = aux = "";
@@ -101,8 +100,6 @@ public class Lexica {
             }
         }
         
-        System.out.println("Res:\n" + res);
-        
         obj[0] = res;
         obj[1] = tabela;
         return obj;
@@ -123,7 +120,6 @@ public class Lexica {
             {
                 try
                 {
-                    System.out.println("VALOR: DOUBLE");
                     double db = Double.parseDouble(id);
                     return "valor_double";
                 }catch(Exception er)
@@ -136,7 +132,6 @@ public class Lexica {
                 try
                 {
                     int db = Integer.parseInt(id);
-                    System.out.println("VALOR: INT");
                     return "valor_decimal";
                 }catch(Exception er)
                 {
