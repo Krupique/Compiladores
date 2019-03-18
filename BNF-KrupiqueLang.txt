@@ -1,0 +1,75 @@
+BNF - Backus Naur Form (Krupique Language)
+
+program-declaration 		= "program" program-name ";" block
+program-name 				= identifiers
+variable-declarator			= var-id | var-id "=" literal
+var-id 						= identifiers
+
+type 						= primitive-type | reference-type
+primitive-type 				= numeric-type | "boolean"
+numeric-type				= integral-type | "double"
+integral-type 				= "int" | "char"
+reference-type 				= "string"
+
+block 						= "{" block-statements "}"
+block-statements 			= block-statement | block-statements block-statement
+block-statement 			= variable-statement | statement
+variable-statement 			= variable-declaration ";"
+statement 					= statement-sem-substatement | if-statement | if-else-statement | while-statement | for-statement
+statement-sem-substatement 	= block | exp-statement
+variable-declaration		= type variable-declarator
+if-statement				= "if" "(" expression ")" statement
+if-else-statement			= "if" "(" expression ")" "else" statement
+while-statement				= "while" "(" expression ")" statement
+exp-statement				= statement-exp ";"
+statement-exp				= assignment | preincrement-expression | postincrement-expression | predecrement-expression | postdecrement-expression
+for-statement				= "for" "(" for-init? ";" expression? ";" for-update? ";" ")" statement
+for-init 					= statement-exp-list | variable-statement
+for-update					= statement-exp-list
+statement-exp-list			= statement-exp | statement-exp-list statement-exp
+
+expression					= assignment-expression
+assignment-expression		= conditional-exp | assignment
+assignment					= assignment-operator assignment-expression
+assignment-operator			= "=" | "*=" | "/=" | "%=" | "+=" | "-=" | "<<" | ">>"
+conditional-exp				= conditional-and-exp | conditional-exp "||" conditional-and-exp
+conditional-and-exp			= equality-exp |  exclusive-or-exp "&&" equality-exp
+equality-exp				= relational-exp | equality-exp "==" relational-exp | equality-exp "!=" relational-exp
+relational-exp				= add-exp | relational-exp "<" add-exp | relational-exp ">" add-exp | relational-exp "<=" add-exp | relational-exp ">=" add-exp
+add-exp						= mult-exp | add-exp "+" mult-exp | add-exp "-" mult-exp
+mult-exp					= unary-exp | mult-exp "*" unary-exp | mult-exp "/" unary-exp | mult-exp "%" unary-exp
+unary-exp					= preincrement-expression | predecrement-expression | postfix-exp
+predecrement-expression		= "--" unary-exp
+preincrement-expression		= "++" unary-exp
+postfix-exp					= primary | postincrement-expression | postdecrement-expression
+postincrement-expression	= assignment "++"
+postdecrement-expression	= assignment "--"
+primary 					= "(" expression ")"
+
+literal						= integer-literal | floating-point-literal | boolean-literal | char-literal | string-literal | null-literal
+integer-literal				= decimal-numeral | hex-numeral | oct-numeral
+decimal-numeral				= "0" | digit digits?
+digits						= digit | digits digit
+digit						= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" 
+oct-numeral					= "o" octal-digit | oct-numeral octal-digit
+octal-digit					= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7"
+hex-numeral					= "x" hex-digit | hex-numeral hex-digit
+hex-digit					= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F"
+floating-point-literal		= digits "." digits? exponente-part ?
+exponente-part				= exponente-indicator signed-integer
+exponente-indicator			= "E"
+signed-integer				= sign ? digits
+sign						= "+" | "-"
+boolean-literal				= "true" | "false" | "verdade" | "mentira"
+char-literal				= "'" single-char "'"
+string-literal				= """ string-chars """
+string-chars				= string-char | string-chars string-char
+string-char					= single-char
+null-literal				= "null" | "NULL" | "nulo"
+identifiers					= letras | identifiers identifier
+identifier					= /*Todas as letras e numeros*/
+single-char					= /*Todos os caracteres, menos ' e \*/
+letras						= /*Todas as letras*/
+keyword						= "boolean" | "char" | "double" | "else" | "false" | "for" | "if" | "int" | "mentira" | "null" | "nulo" | "NULL" | "program" | "string" | "true" | "verdade" | "while"
+
+comments 					= "@" string-chars "@"
