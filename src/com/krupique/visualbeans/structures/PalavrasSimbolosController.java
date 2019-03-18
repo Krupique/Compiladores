@@ -58,17 +58,9 @@ public class PalavrasSimbolosController {
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("?", "operador ternário", "tk_oper_ternario");
         listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados(":", "se não ternário", "tk_else_ternario");
-        listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("||", "or lógico", "tk_or");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("&&", "and lógico", "tk_and");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("|", "or inclusivo", "tk_or_inclusivo");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("^", "or exclusivo", "tk_or_exclusivo");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("&", "and inclusivo", "tk_and_inclusivo");
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("==", "igualdade", "tk_igualdade");
         listSimbolos.add(simbolos);
@@ -104,31 +96,13 @@ public class PalavrasSimbolosController {
         listSimbolos.add(simbolos);
         simbolos = new SimbolosReservados("!", "negação", "tk_negacao");
         listSimbolos.add(simbolos);
-        /*simbolos = new SimbolosReservados("'\\n'", "quebra de linha", "tk_barra_n");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("'\\0'", "final de linha", "tk_barra_zero");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("'\\t'", "tabulação", "tk_tab");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("'\\\"'", "barra aspas", "tk_barra_aspas");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("\"", "leitura de string", "tk_leitura_string");
-        listSimbolos.add(simbolos);
-        simbolos = new SimbolosReservados("'", "leitura de caracter", "tk_leitura_char");
-        listSimbolos.add(simbolos);*/
         simbolos = new SimbolosReservados(",", "vírgula", "tk_virgula");
         listSimbolos.add(simbolos);
-        /*simbolos = new SimbolosReservados(".", "ponto", "tk_ponto");
-        listSimbolos.add(simbolos);*/
     }    
 
     private void iniciarPalavras() {
         PalavrasReservadas palavra;
-        palavra = new PalavrasReservadas("and", "operador", "tk_operador_and");
-        listPalavras.add(palavra);
         palavra = new PalavrasReservadas("boolean", "tipo", "tk_tipo_bool");
-        listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("catch", "comando", "tk_comando_catch");/**/
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("char", "tipo", "tk_tipo_char");
         listPalavras.add(palavra);
@@ -146,25 +120,17 @@ public class PalavrasSimbolosController {
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("mentira", "afirmação", "tk_afirmacao_false");
         listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("new", "declaração", "tk_operador_new");/**/
-        listPalavras.add(palavra);
         palavra = new PalavrasReservadas("null", "tipo", "tk_tipo_null");
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("nulo", "tipo", "tk_tipo_null");
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("NULL", "tipo", "tk_tipo_null");
         listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("or", "operador", "tk_operador_or");
-        listPalavras.add(palavra);
         palavra = new PalavrasReservadas("program", "declaração", "tk_declaracao_program");
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("string", "tipo", "tk_tipo_string");
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("true", "afirmação", "tk_afirmacao_true");
-        listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("try", "comando", "tk_comando_try");/**/
-        listPalavras.add(palavra);
-        palavra = new PalavrasReservadas("var", "declaração", "tk_declaracao_var"); /**/
         listPalavras.add(palavra);
         palavra = new PalavrasReservadas("verdade", "afirmação", "tk_afirmacao_true");
         listPalavras.add(palavra);

@@ -14,9 +14,23 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
  */
 public class Colors {
     private CodeArea codeArea;
-    private String exampleString = "This is a WARNING for an INFO! Please stay tuned";
+    private String exampleString = "program exemplo;\n" +
+                                    "{\n" +
+                                    "	int x = 10; @Isto é um comentário@\n" +
+                                    "	int y = 20;\n" +
+                                    "	string str = \"Henrique K.\";\n" +
+                                    "	char cr = 'S';\n" +
+                                    "	if(x < y)\n" +
+                                    "	{\n" +
+                                    "		while(x < y)\n" +
+                                    "		{\n" +
+                                    "			++x;\n" +
+                                    "			y = y * 10 / (x * 2);\n" +
+                                    "		}\n" +
+                                    "	}\n" +
+                                    "}";
 
-    private static final String[] KEYWORDS = new String[]{"and", "boolean", "catch", "char", "double", "else", "false", "for", "if", "int", "mentira", "new", "null", "nulo", "NULL", "or", "program", "string", "true", "try", "var", "verdade", "while"};
+    private static final String[] KEYWORDS = new String[]{"boolean", "char", "double", "else", "false", "for", "if", "int", "mentira", "null", "nulo", "NULL", "program", "string", "true", "verdade", "while"};
     //private static final String[] SIMBOLOS = new String[]{"a, b, c, d, e, f"};
     
     //private static final String SIMBOLOS_PATTERN = "\\b(" + String.join("|", SIMBOLOS) + ")\\b";
@@ -43,7 +57,7 @@ public class Colors {
 
     public Colors(CodeArea codeArea) {
         this.codeArea = codeArea;
-        exampleString = "Ħ";
+        //exampleString = "Ħ";
         start();
     }
 
@@ -53,12 +67,12 @@ public class Colors {
     
     public void start() {
         String css = "com/krupique/visualbeans/styles/main_code_area.css";
-        exampleString += "Ħ";
+        //exampleString += "Ħ";
         codeArea.textProperty().addListener((obs, oldText, newText) -> 
         {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
-        exampleString = exampleString.replaceAll("Ħ", "");
+        //exampleString = exampleString.replaceAll("Ħ", "");
         codeArea.replaceText(0, 0, exampleString);
         codeArea.getStylesheets().add(css);
     }

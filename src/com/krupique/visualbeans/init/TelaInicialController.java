@@ -103,6 +103,8 @@ public class TelaInicialController implements Initializable {
     private TableView<TabelaTokens> tbvTokens;
     @FXML
     private JFXTextArea textSintatico;
+    @FXML
+    private AnchorPane ancPrincipal;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
