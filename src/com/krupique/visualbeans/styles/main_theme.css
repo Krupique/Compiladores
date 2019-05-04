@@ -61,7 +61,7 @@
     -fx-text-fill: white;
 }
 
-#textLexico, #textSintatico
+#textLexico, #textSintatico, #textSemantic
 {
     -fx-background-color: #232229;
     -fx-prompt-text-fill: white;

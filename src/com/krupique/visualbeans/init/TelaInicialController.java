@@ -12,8 +12,12 @@ import com.krupique.visualbeans.structures.ListaVariaveis;
 import com.krupique.visualbeans.structures.TabelaTokens;
 import com.krupique.visualbeans.utils.Colors;
 import com.krupique.visualbeans.utils.Erros;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +40,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
@@ -87,6 +92,7 @@ public class TelaInicialController implements Initializable {
     private String textoLexico;
     private Lexica lexica;
     private String string;
+    private String stropen;
     
     private ArrayList<TabelaTokens> tabela;
     @FXML
@@ -94,17 +100,19 @@ public class TelaInicialController implements Initializable {
     @FXML
     private TableColumn<String, String> clToken;
     @FXML
-    private TableColumn<String, String> clEstado;
-    @FXML
-    private TableColumn<Integer, Integer> clLinha;
-    @FXML
-    private TableColumn<Integer, Integer> clColuna;
-    @FXML
     private TableView<TabelaTokens> tbvTokens;
     @FXML
     private JFXTextArea textSintatico;
     @FXML
     private AnchorPane ancPrincipal;
+    @FXML
+    private TableColumn<String, String> clCategoria;
+    @FXML
+    private TableColumn<String, String> clTipo;
+    @FXML
+    private TableColumn<String, String> clValor;
+    @FXML
+    private JFXTextArea textSemantic;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -121,9 +129,9 @@ public class TelaInicialController implements Initializable {
     {
         clPalavra.setCellValueFactory(new PropertyValueFactory<>("palavra"));
         clToken.setCellValueFactory(new PropertyValueFactory<>("token"));
-        clEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        clLinha.setCellValueFactory(new PropertyValueFactory<>("linha"));
-        clColuna.setCellValueFactory(new PropertyValueFactory<>("coluna"));
+        clCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
+        clTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        clValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
     }
     
     public void carregarCss()
@@ -169,10 +177,10 @@ public class TelaInicialController implements Initializable {
     
     @FXML
     private void newFile(ActionEvent event) {
-        newTabFile();
+        newTabFile("");
     }
     
-    public void newTabFile()
+    public void newTabFile(String str)
     {
         Tab tab = new Tab("Sem título" + (listtabs.size() + 1));
         listtabs.add(tab);
@@ -185,8 +193,13 @@ public class TelaInicialController implements Initializable {
                 completaTexto(event);
             }
         });
+        Colors cr;
+        if(str.equals(""))
+            cr = new Colors(code);
+        else
+            cr = new Colors(code, str);
+            
         
-        Colors cr = new Colors(code);
         code = cr.getCodeArea();
         
         
@@ -208,6 +221,36 @@ public class TelaInicialController implements Initializable {
     
     @FXML
     private void openFile(ActionEvent event) {
+        Properties prop = System.getProperties();
+        FileChooser fc = new FileChooser();
+        
+        if(prop.getProperty("os.name").toLowerCase().contains("windows"))
+            fc.setInitialDirectory(new File("C:/"));
+        else
+            fc.setInitialDirectory(new File("/home"));
+        
+        File arq = fc.showOpenDialog(null);
+        if(arq != null)
+        {
+            try
+            {
+                String line;
+                BufferedReader br = new BufferedReader(new FileReader(arq));
+                stropen = "";
+                while(br.ready())
+                {
+                    line = br.readLine();
+                    if(line.length() > 0)
+                        stropen += line + "\n";
+                }
+                
+                newTabFile(stropen);
+                //System.out.println(stropen);
+            }catch(Exception er){
+                Alert a = new Alert(Alert.AlertType.ERROR, "Erro ao abrir programa!", ButtonType.OK);
+                a.showAndWait();
+            }
+        }
     }
 
     @FXML
@@ -299,7 +342,7 @@ public class TelaInicialController implements Initializable {
 
     @FXML
     private void evtNewFile(MouseEvent event) {
-        newTabFile();
+        newTabFile("");
     }
 
     @FXML
@@ -359,7 +402,8 @@ public class TelaInicialController implements Initializable {
     }
 
     private void adicionarAnaliseSintatica(ArrayList<TabelaTokens> list) {
-        String str = "";
+        String strsint = "";
+        String strseman = "";
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         ArrayList<Erros> erros = new ArrayList<Erros>();
         Erros erro;
@@ -367,9 +411,15 @@ public class TelaInicialController implements Initializable {
         
         Image img = new Image("com/krupique/visualbeans/resources/error.png");
         for (int i = 0; i < list.size(); i++) {
-            if(!list.get(i).getEstado())
+            if(list.get(i).getEstado() == 1) //Erro sintatico
             {
-                str += list.get(i).getLog() + " Linha: " + list.get(i).getLinha() + " Coluna: " + list.get(i).getColuna() + "\n";
+                strsint += list.get(i).getLog() + " Linha: " + list.get(i).getLinha() + " Coluna: " + list.get(i).getColuna() + "\n";
+                erro = new Erros(new ImageView(img), 6, linha + (list.get(i).getLinha() - 1) * 15);
+                erros.add(erro);
+            }
+            else if(list.get(i).getEstado() == 2) //Erro semantico
+            {
+                strseman += list.get(i).getLog() + " Linha: " + list.get(i).getLinha() + " Coluna: " + list.get(i).getColuna() + "\n";
                 erro = new Erros(new ImageView(img), 6, linha + (list.get(i).getLinha() - 1) * 15);
                 erros.add(erro);
             }
@@ -381,7 +431,8 @@ public class TelaInicialController implements Initializable {
         for (int i = 0; i < erros.size(); i++)
             p.getChildren().add(erros.get(i).getImg());
         
-        textSintatico.setText(str);
+        textSintatico.setText(strsint);
+        textSemantic.setText(strseman);
     }
 
     @FXML

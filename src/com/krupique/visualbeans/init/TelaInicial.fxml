@@ -170,7 +170,10 @@
                               </Tab>
                               <Tab text="Análise Semântica">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <JFXTextArea fx:id="textSemantic" editable="false" focusColor="#34333a" prefHeight="206.0" prefWidth="760.0" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                       </children></AnchorPane>
                                 </content>
                               </Tab>
                            </tabs>
@@ -189,9 +192,9 @@
                                             <columns>
                                               <TableColumn fx:id="clPalavra" prefWidth="66.0" text="Palavra" />
                                               <TableColumn fx:id="clToken" prefWidth="75.0" text="Token" />
-                                                <TableColumn fx:id="clEstado" prefWidth="50.0" text="Estado" />
-                                                <TableColumn fx:id="clLinha" prefWidth="44.0" text="Linha" />
-                                                <TableColumn fx:id="clColuna" prefWidth="44.0" text="Coluna" />
+                                                <TableColumn fx:id="clCategoria" prefWidth="50.0" text="Categoria" />
+                                                <TableColumn fx:id="clTipo" prefWidth="44.0" text="Tipo" />
+                                                <TableColumn fx:id="clValor" prefWidth="44.0" text="Valor" />
                                             </columns>
                                           </TableView>
                                        </children>

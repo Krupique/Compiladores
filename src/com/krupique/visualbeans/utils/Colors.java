@@ -63,7 +63,12 @@ public class Colors {
 
     public Colors(CodeArea codeArea) {
         this.codeArea = codeArea;
-        //exampleString = "Ħ";
+        start();
+    }
+    
+    public Colors(CodeArea codeArea, String texto){
+        exampleString = texto;
+        this.codeArea = codeArea;
         start();
     }
 
@@ -73,12 +78,10 @@ public class Colors {
     
     public void start() {
         String css = "com/krupique/visualbeans/styles/main_code_area.css";
-        //exampleString += "Ħ";
         codeArea.textProperty().addListener((obs, oldText, newText) -> 
         {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
-        //exampleString = exampleString.replaceAll("Ħ", "");
         codeArea.replaceText(0, 0, exampleString);
         codeArea.getStylesheets().add(css);
     }

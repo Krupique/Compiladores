@@ -55,7 +55,7 @@ public class Lexica {
                 if(tokens.buscaToken(ant))
                 {
                     tk = tokens.buscarToken(ant);
-                    tabela.add(new TabelaTokens(ant, tk, "valido", l, c - ant.length(), true));
+                    tabela.add(new TabelaTokens(ant, tk, "valido", l, c - ant.length(), 0));
                     res += ant + " " + tk + "\n";
                     i = i - (aux.length() - ant.length());
                     if(str.charAt(i + 1) == ' ')
@@ -78,7 +78,7 @@ public class Lexica {
                     }
                     //GUARDAR IDENTIFICADOR
                     identificador = tratarIdentificador(ant);
-                    tabela.add(new TabelaTokens(ant, identificador, "valido", l, c - ant.length(), true));
+                    tabela.add(new TabelaTokens(ant, identificador, "valido", l, c - ant.length(), 0));
                     res += ant + " " + identificador + "\n";
                     
                 }

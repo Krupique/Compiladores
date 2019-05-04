@@ -12,12 +12,15 @@ package com.krupique.visualbeans.structures;
 public class TabelaTokens {
     private String palavra;
     private String token;
-    private String log;
-    private boolean estado;
+    private String log; //0 = sem erros, 1 = erro sintático, 2 = erro semântico
     private int linha;
     private int coluna;
+    private int estado;
+    private String categoria;
+    private String tipo;
+    private String valor;
 
-    public TabelaTokens(String palavra, String token, String log, int linha, int coluna, boolean estado) {
+    public TabelaTokens(String palavra, String token, String log, int linha, int coluna, int estado) {
         this.palavra = palavra;
         this.token = token;
         this.log = log;
@@ -25,6 +28,20 @@ public class TabelaTokens {
         this.coluna = coluna;
         this.estado = estado;
     }
+
+    public TabelaTokens(String palavra, String token, String log, int linha, int coluna, int estado, String categoria, String tipo, String valor) {
+        this.palavra = palavra;
+        this.token = token;
+        this.log = log;
+        this.linha = linha;
+        this.coluna = coluna;
+        this.estado = estado;
+        this.categoria = categoria;
+        this.tipo = tipo;
+        this.valor = valor;
+    }
+    
+    
 
     public String getPalavra() {
         return palavra;
@@ -42,11 +59,11 @@ public class TabelaTokens {
         this.token = token;
     }
 
-    public boolean getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
@@ -74,7 +91,7 @@ public class TabelaTokens {
         this.log = log;
     }
     
-    public void setLogEstado(String log, boolean estado)
+    public void setLogEstado(String log, int estado)
     {
         this.log = log;
         this.estado = estado;

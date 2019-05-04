@@ -39,6 +39,8 @@ public class Sintatica {
         }
         
         identificarProgram(); //Faz a análise sintática.
+        //Semantica semantic = new Semantica(tabela);
+        //tabela = semantic.validar();
         
         //Empacota os dados em um vetor de objetos. Famoso MVC.
         obj[0] = objaux[0]; //Texto léxico.
@@ -66,24 +68,24 @@ public class Sintatica {
             if(aux.getTl() == 3)
             {
                 if(!aux.pop().equals("tk_declaracao_program"))
-                    tabela.get(0).setLogEstado("[Erro]: Declaração de programa inválida!", false);
+                    tabela.get(0).setLogEstado("[Erro]: Declaração de programa inválida!", 1);
                 
                 if(!aux.pop().equals("identificador"))
-                    tabela.get(1).setLogEstado("[Erro]: Declaração de nome de programa inválida!", false);
+                    tabela.get(1).setLogEstado("[Erro]: Declaração de nome de programa inválida!", 1);
                 
                 if(!aux.pop().equals("tk_ponto_virgula"))
-                    tabela.get(2).setLogEstado("[Erro]: Ponto e vírgula inválido!", false);
+                    tabela.get(2).setLogEstado("[Erro]: Ponto e vírgula inválido!", 1);
             } 
             else if(aux.getTl() < 3)
-                tabela.get(0).setLogEstado("[Erro]: Está faltando parâmetros na declaração!", false);
+                tabela.get(0).setLogEstado("[Erro]: Está faltando parâmetros na declaração!", 1);
             else
-                tabela.get(0).setLogEstado("[Erro]: Parâmetros excedentes na declaração!", false);
+                tabela.get(0).setLogEstado("[Erro]: Parâmetros excedentes na declaração!", 1);
             /**/
             
             identificarBloco(i);
         }
         else
-            tabela.get(0).setLogEstado("[Erro]: Declaração inválida!", false);
+            tabela.get(0).setLogEstado("[Erro]: Declaração inválida!", 1);
         
     }
     
@@ -102,7 +104,7 @@ public class Sintatica {
             else
             {
                 pilha.push(tabela.get(pos).getToken());
-                tabela.get(pos).setLogEstado("[Erro]: Abrir chaves declarado incorretamente!", false);
+                tabela.get(pos).setLogEstado("[Erro]: Abrir chaves declarado incorretamente!", 1);
             }
 
             //Verificar o pos...
@@ -111,15 +113,15 @@ public class Sintatica {
             if(pos >= tabela.size())
             {
                 pos--;
-                tabela.get(pos).setLogEstado("[Erro]: Não foi declarado fechar chaves!", false);
+                tabela.get(pos).setLogEstado("[Erro]: Não foi declarado fechar chaves!", 1);
             }
             else
             {
                 pilha.push(tabela.get(pos++).getToken());
                 if(pilha.getTl() < 2)
-                    tabela.get(auxpos).setLogEstado("[Erro]: Você deveria ter declarado abrir chaves!", false);
+                    tabela.get(auxpos).setLogEstado("[Erro]: Você deveria ter declarado abrir chaves!", 1);
                 if(!pilha.pop().equals("tk_fechar_chaves"))
-                    tabela.get(pos - 1).setLogEstado("[Erro]: Fechar chaves declarado incorretamente!", false);            
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Fechar chaves declarado incorretamente!", 1);            
             }
             
         }
@@ -131,7 +133,7 @@ public class Sintatica {
             pos = identificarStatement(pos);
         else if(prox == -1)
         {
-            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
+            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", 1);
             pos = identificarStatement(pos);
         }
         
@@ -168,7 +170,7 @@ public class Sintatica {
         }
         else if(!tabela.get(pos).getToken().equals("tk_fechar_chaves"))//ERRO
         {
-            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
+            tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", 1);
         }
         
         //Valida para ver se nao tem nada pra baixo.
@@ -179,7 +181,7 @@ public class Sintatica {
             pos = identificarStatement(pos);
         else if(prox == -1) //Achou coisas que não fazem sentido
         {
-           tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", false);
+           tabela.get(pos++).setLogEstado("[Erro]: Operação desconhecida!", 1);
            pos = identificarStatement(pos);
         }
         
@@ -238,33 +240,33 @@ public class Sintatica {
             if(pilha.getTl() == 3 && pilha.getTopPilha().equals("tk_ponto_virgula"))
             {
                 if(!pilha.pop().equals("tk_ponto_virgula"))
-                    tabela.get(pos - 1).setLogEstado("[Erro]: Declaração de ponto vírgula inválido!", false);
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Declaração de ponto vírgula inválido!", 1);
                 
                 if(flag == 1) //Pre incremento/decremento
                 {
                     if(!pilha.pop().equals("identificador"))
-                        tabela.get(pos - 2).setLogEstado("[Erro]: Declaração de identificador inválido!", false);
+                        tabela.get(pos - 2).setLogEstado("[Erro]: Declaração de identificador inválido!", 1);
                     String auxp = pilha.pop();
                     if(!(auxp.equals("tk_inc") || auxp.equals("tk_dec")))
-                        tabela.get(pos - 3).setLogEstado("[Erro]: Declaração de operador (++|--) inválido!", false);
+                        tabela.get(pos - 3).setLogEstado("[Erro]: Declaração de operador (++|--) inválido!", 1);
                 }
                 else if(flag == 2) //Post incremento/decremento
                 {
                     String auxp = pilha.pop();
                     if(!(auxp.equals("tk_inc") || auxp.equals("tk_dec")))
-                        tabela.get(pos - 2).setLogEstado("[Erro]: Declaração de operador (++|--) inválido!", false);
+                        tabela.get(pos - 2).setLogEstado("[Erro]: Declaração de operador (++|--) inválido!", 1);
                     if(!pilha.pop().equals("identificador"))
-                        tabela.get(pos - 3).setLogEstado("[Erro]: Declaração de identificador inválido!", false);
+                        tabela.get(pos - 3).setLogEstado("[Erro]: Declaração de identificador inválido!", 1);
                 }
             }
             else if(pilha.getTl() > 3)
-                tabela.get(pos - 3).setLogEstado("[Erro]: Parâmetros excedentes na operação (++V|--V)!", false);
+                tabela.get(pos - 3).setLogEstado("[Erro]: Parâmetros excedentes na operação (++V|--V)!", 1);
             else
-                tabela.get(pos - 3).setLogEstado("[Erro]: Está faltando parâmetros na operação (++V|--V)!", false);
+                tabela.get(pos - 3).setLogEstado("[Erro]: Está faltando parâmetros na operação (++V|--V)!", 1);
         }
         else
         {
-            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", 1);
         }
         
         return pos;
@@ -284,41 +286,46 @@ public class Sintatica {
             if(pilha.getTl() < 3 || pilha.getTl() == 4) //Está errado.
             {
                 if(pilha.pop().equals("tk_ponto_virgula"))
-                    tabela.get(pos - 1).setLogEstado("[Erro]: Está faltando parâmetros na declaração!", false);
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Está faltando parâmetros na declaração!", 1);
                 else
-                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", false);
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida!", 1);
             }
             else if(pilha.getTl() == 3) //Deve ser uma simples declaração.
             {
                 //Fazer a validação ser a variável já foi declarada anteriormente.
+                String var = tabela.get(pos - 2).getPalavra();
+                foiDeclarado(var, pos - 3);
                 
                 if(!pilha.pop().equals("tk_ponto_virgula"))
-                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", 1);
                 if(!pilha.pop().equals("identificador"))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: Identificador declarado incorretamente!", 1);
                 pilha.pop();
             }
             else if(pilha.getTl() == 5) //Deve ser uma declaração e uma atribuição.
             {
+                String var = tabela.get(pos - 4).getPalavra();
+                foiDeclarado(var, pos - 5);
+                
                 if(!pilha.pop().equals("tk_ponto_virgula"))
-                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", 1);
                 String valor = pilha.pop();
                 
                 if(!pilha.pop().equals("tk_atribuicao"))
-                    tabela.get(pos - 3).setLogEstado("[Erro]: Atribuição inválida!", false);
+                    tabela.get(pos - 3).setLogEstado("[Erro]: Atribuição inválida!", 1);
                 
-                String var = pilha.pop();
-                if(!var.equals("identificador"))
-                    tabela.get(pos - 4).setLogEstado("[Erro]: Identificador inválido!", false);
+                String ident = pilha.pop();
+                if(!ident.equals("identificador"))
+                    tabela.get(pos - 4).setLogEstado("[Erro]: Identificador inválido!", 1);
                 
                 String tipo = pilha.pop();
-                validarValorTipo(tipo, var, valor, pos);
+                validarValorTipo(tipo, ident, valor, pos);
                 
             }
             else //Deve ser uma declaração seguida de uma expressão aritmética.
             {
                 if(!pilha.pop().equals("tk_ponto_virgula"))
-                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", false);
+                    tabela.get(pos - 1).setLogEstado("[Erro]: Ponto e vírgula declarado incorretamente!", 1);
                 
                 
                 int j = 2;
@@ -334,11 +341,11 @@ public class Sintatica {
                 if(!pilha.isEmpty())
                 {
                     if(!valor.equals("tk_atribuicao"))
-                        tabela.get(pos - j).setLogEstado("[Erro]: Atribuição inválida!", false);
+                        tabela.get(pos - j).setLogEstado("[Erro]: Atribuição inválida!", 1);
                     
                     String auxstr = pilha.pop();
                     if(!auxstr.equals("identificador"))
-                        tabela.get(pos - j - 1).setLogEstado("[Erro]: Identificador declarado incorretamente!", false);
+                        tabela.get(pos - j - 1).setLogEstado("[Erro]: Identificador declarado incorretamente!", 1);
                     
                     String tipo;
                     if(pilha.getTl() == 1)
@@ -348,7 +355,7 @@ public class Sintatica {
                         int k = 0;
                         while(pilha.getTl() > 1)
                         {
-                            tabela.get(pos - j - k++).setLogEstado("[Erro]: Parâmetros exdentes na operação!", false);
+                            tabela.get(pos - j - k++).setLogEstado("[Erro]: Parâmetros exdentes na operação!", 1);
                             pilha.pop();
                         }
                         tipo = pilha.pop();
@@ -359,7 +366,7 @@ public class Sintatica {
                 }
                 else
                 {
-                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Não foi encontrado o comando atribuição!", false);
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Não foi encontrado o comando atribuição!", 1);
                 }
             }
             
@@ -370,7 +377,7 @@ public class Sintatica {
         }
         else
         {
-            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Era esperado ponto e vírgula no final da operação!", false);
+            tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Era esperado ponto e vírgula no final da operação!", 1);
             pos--;
         }
         return pos;
@@ -378,17 +385,19 @@ public class Sintatica {
 
     private void validarValorTipo(String tipo, String var, String valor, int pos) 
     {
+        
         if(validarDeclaracaoVar(var)) //Fazer essa função na análise semântica
         {
             if(tipo.equals("tk_tipo_int"))
             {
                 if(valor.equals("identificador"))
                 {
+                    System.out.println("Entrou aqui");
                     //validar identificador.
                     //validarVariavel("tk_tipo_int", pos - 2);
                 }
                 else if(!(valor.equals("valor_decimal") || valor.equals("valor_octal") || valor.equals("valor_hexadecimal")))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor inteiro!", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor inteiro!", 2);
 
             }
             else if(tipo.equals("tk_tipo_char"))
@@ -399,7 +408,7 @@ public class Sintatica {
                     //validarVariavel("tk_tipo_char", pos - 2);
                 }
                 else if(!valor.equals("valor_char"))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um caracter entre ''!", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um caracter entre ''!", 2);
             }
             else if(tipo.equals("tk_tipo_double"))
             {
@@ -409,7 +418,7 @@ public class Sintatica {
                     //validarVariavel("tk_tipo_double", pos - 2);
                 }
                 else if(!(valor.equals("valor_double") || valor.equals("valor_decimal")))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor inteiro ou de ponto flutante!", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor inteiro ou de ponto flutante!", 2);
             }
             else if(tipo.equals("tk_tipo_bool"))
             {
@@ -419,7 +428,7 @@ public class Sintatica {
                     //validarVariavel("tk_tipo_bool", pos - 2);
                 }
                 else if(!(valor.equals("tk_afirmacao_false") || valor.equals("tk_afirmacao_true")))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor booleano!", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um valor booleano!", 2);
             }
             else if(tipo.equals("tk_tipo_string"))
             {
@@ -429,16 +438,16 @@ public class Sintatica {
                     //validarVariavel("tk_tipo_string", pos - 2);
                 }
                 else if(!valor.equals("valor_string"))
-                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um ou mais caracteres entre \"\"", false);
+                    tabela.get(pos - 2).setLogEstado("[Erro]: O valor não condiz com o tipo declarado! Insira um ou mais caracteres entre \"\"", 2);
             }
             else //Erro de tipo
             {
-                tabela.get(pos - 4).setLogEstado("[Erro]: Tipo de variável declarado incorretamente!", false);
+                tabela.get(pos - 4).setLogEstado("[Erro]: Tipo de variável declarado incorretamente!", 2);
             }
         }
         else //Erro na declaração de variável
         {
-            tabela.get(pos - 3).setLogEstado("[Erro]: A variável já foi declarada anteriormente!", false);
+            tabela.get(pos - 3).setLogEstado("[Erro]: A variável já foi declarada anteriormente!", 2);
         }
         
     }
@@ -456,6 +465,7 @@ public class Sintatica {
     private boolean validarDeclaracaoVar(String var) 
     {
         //Serve para validar se a variável já não foi declarada anteriormente.
+        System.out.println(var);
         return true;
     }
     
@@ -503,7 +513,7 @@ public class Sintatica {
                         flag = 1;
                     }
                     else{
-                        tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", false);
+                        tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", 1);
                         
                     }
                     auxj++;
@@ -515,19 +525,19 @@ public class Sintatica {
                     else if(var.equals("tk_add") || var.equals("tk_sub") || var.equals("tk_mult") || var.equals("tk_div") || var.equals("tk_resto"))
                         flag = 0;
                     else{
-                        tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", false);
+                        tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", 1);
                        
                     }
                     auxj++;
                 }
             }
             if(cont > 0)
-                tabela.get(auxj).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", false);
+                tabela.get(auxj).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", 1);
             else if(cont < 0)
-                tabela.get(auxj).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", false);
+                tabela.get(auxj).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", 1);
         }
         else
-            tabela.get(auxj).setLogEstado("[Erro]: Operação inválida! Impossível realizar expressões com esse tipo de variável (" + type +")!", true);
+            tabela.get(auxj).setLogEstado("[Erro]: Operação inválida! Impossível realizar expressões com esse tipo de variável (" + type +")!", 2);
 
         System.out.println("Test");
     }
@@ -540,14 +550,14 @@ public class Sintatica {
         int auxpos = pos, j;
         
         if(!tabela.get(pos).getToken().equals("identificador"))
-            tabela.get(pos).setLogEstado("[Erro]: Operação inválida!", false);
+            tabela.get(pos).setLogEstado("[Erro]: Operação inválida!", 1);
         else
         {
             pos++;
             attrib = tabela.get(pos).getToken();
             
             if(!(attrib.contains("atribuicao")))
-                tabela.get(pos).setLogEstado("[Erro]: Atribuição inválida!", false);
+                tabela.get(pos).setLogEstado("[Erro]: Atribuição inválida!", 1);
             else
             {
                 pos++;
@@ -567,7 +577,7 @@ public class Sintatica {
                 }
                 else
                 {
-                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Era esperado ponto e vírgula no final da operação!", false);
+                    tabela.get(auxpos).setLogEstado("[Erro]: Operação inválida! Era esperado ponto e vírgula no final da operação!", 1);
                     pos -= 2;
                 }
             }
@@ -615,13 +625,13 @@ public class Sintatica {
                 }
                 else
                 {
-                    tabela.get(--pos).setLogEstado("[Erro]: Operação inválida!", false);
+                    tabela.get(--pos).setLogEstado("[Erro]: Operação inválida!", 1);
                 }
 
             }
             else
             {
-                tabela.get(pos - 1).setLogEstado("[Erro]: Erro na declaração de comando! Era esperado abrir parênteses!", false);
+                tabela.get(pos - 1).setLogEstado("[Erro]: Erro na declaração de comando! Era esperado abrir parênteses!", 1);
             }
             
         }
@@ -636,10 +646,10 @@ public class Sintatica {
                 if(!tabela.get(pos + 1).equals("tk_comando_else"))
                     pos = identificarStatement(++pos);
                 else
-                    tabela.get(pos + 1).setLogEstado("[Erro]: Não era esperado um else seguido de outro else!", false);
+                    tabela.get(pos + 1).setLogEstado("[Erro]: Não era esperado um else seguido de outro else!", 1);
             }
             else
-                tabela.get(pos++).setLogEstado("[Erro]: Operação de else inválida!", false);
+                tabela.get(pos++).setLogEstado("[Erro]: Operação de else inválida!", 1);
         }
         return pos;
     }
@@ -668,7 +678,7 @@ public class Sintatica {
                 else if(flag == 5)
                     aux = validarIncDec(aux, 2);
                 else
-                    tabela.get(aux).setLogEstado("[Erro]: Operação inválida no primeiro parâmetro do for!", false);
+                    tabela.get(aux).setLogEstado("[Erro]: Operação inválida no primeiro parâmetro do for!", 1);
             
                 if(aux == pos + 1) //primeiro ; do for.
                 {
@@ -697,33 +707,33 @@ public class Sintatica {
                                 else if(flag == 5)
                                     aux = validarIncDec(aux, 2);
                                 else
-                                    tabela.get(aux).setLogEstado("[Erro]: Operação inválida no terceiro parâmetro do for!", false);
+                                    tabela.get(aux).setLogEstado("[Erro]: Operação inválida no terceiro parâmetro do for!", 1);
 
                                 pos = aux;
                                 
                                 if(pos < tabela.size() && !tabela.get(pos).getToken().equals("tk_fechar_parenteses"))
-                                    tabela.get(pos).setLogEstado("[Erro]: Não foi encontrado a operação fechar parênteses!", false);
+                                    tabela.get(pos).setLogEstado("[Erro]: Não foi encontrado a operação fechar parênteses!", 1);
                                 
                                 return ++pos;
                                 
                             }
                             else
-                                tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no terceiro parâmetro do for!", false);   
+                                tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no terceiro parâmetro do for!", 1);   
                             
                         }
                         else
-                            tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no terceiro parâmetro do for!", false);   
+                            tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no terceiro parâmetro do for!", 1);   
                         
                     }
                     else
-                        tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no segundo parâmetro do for!", false);   
+                        tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no segundo parâmetro do for!", 1);   
                 }
             }
             else
-                tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no primeiro parâmetro do for", false);
+                tabela.get(aux).setLogEstado("[Erro]: Operação de for inválida! Erro no primeiro parâmetro do for", 1);
         }
         else
-            tabela.get(pos - 1).setLogEstado("[Erro]: Não foi encontrado abrir chaves!", false);
+            tabela.get(pos - 1).setLogEstado("[Erro]: Não foi encontrado abrir chaves!", 1);
 
         return pos;
     }
@@ -755,7 +765,7 @@ public class Sintatica {
                     flag = 1;
                 }
                 else{
-                    tabela.get(pos).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", false);
+                    tabela.get(pos).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", 1);
                     flag = 1;
                 }
                 pos++;
@@ -769,7 +779,7 @@ public class Sintatica {
                     flag = 0;
                 }
                 else{
-                    tabela.get(pos).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", false);
+                    tabela.get(pos).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", 1);
                     flag = 0;
                 }
                 pos++;
@@ -777,9 +787,9 @@ public class Sintatica {
         }
         
         if(cont > 0)
-            tabela.get(pos).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", false);
+            tabela.get(pos).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", 1);
         else if(cont < 0)
-            tabela.get(pos).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", false);
+            tabela.get(pos).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", 1);
     
     
         return pos;
@@ -811,7 +821,7 @@ public class Sintatica {
                     flag = 2;
                 }
                 else{
-                    tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", false);
+                    tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado abrir parênteses, identificador ou um valor!", 1);
                     flag = 1;
                 }
                 auxj++;
@@ -827,7 +837,7 @@ public class Sintatica {
                     flag = 0;
                 }
                 else{
-                    tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", false);
+                    tabela.get(auxj).setLogEstado("[Erro]: Valor inválido! Era esperado fechar parênteses ou uma operação matemática!", 1);
                     flag = 0;
                 }
                 auxj++;
@@ -840,7 +850,7 @@ public class Sintatica {
                     flag = 0;
                 else
                 {
-                    tabela.get(auxj).setLogEstado("[Erro]: Era esperado um operador de igualdede ou um operador lógico!", false);
+                    tabela.get(auxj).setLogEstado("[Erro]: Era esperado um operador de igualdede ou um operador lógico!", 1);
                     flag = 0;
                 }
 
@@ -848,9 +858,23 @@ public class Sintatica {
             }
         }
         if(cont > 0)
-            tabela.get(auxj).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", false);
+            tabela.get(auxj).setLogEstado("[Erro]: Abrir parênteses excedentes na expressão!", 1);
         else if(cont < 0)
-            tabela.get(auxj).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", false);
+            tabela.get(auxj).setLogEstado("[Erro]: Fechar parênteses excedentes na expressão!", 1);
+    }
+
+    private boolean foiDeclarado(String var, int pos) {
+        String aux;
+        for (int j = 0; j < pos; j++) {
+            aux = tabela.get(j).getPalavra();
+            if(aux.equals(var))
+            {
+                tabela.get(pos + 1).setLogEstado("[Erro] Esta variável já foi declarada anteriormente!", 2);
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
     
