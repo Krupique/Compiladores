@@ -22,24 +22,29 @@ public class Semantica {
     
     public ArrayList<TabelaTokens> validar()
     {
-        int x;
-        String str;
-        
         for (int i = 0; i < tabela.size(); i++) {
-            str = tabela.get(i).getToken();
-            if(str.equals("identificador"))
+            if(tabela.get(i).getToken().equals("tk_declaracao_program"))
+                tabela.get(i).setCatTipVal("Declaração", "-", "-");
+            else if(tabela.get(i).getToken().equals("identificador"))
             {
-                for (int j = i + 1; j < tabela.size(); j++) {
-                    String tabi = tabela.get(i).getPalavra();
-                    String tabj = tabela.get(j).getPalavra();
-                    
-                    if(tabi.equals(tabj))
-                    {
-                        tabela.get(j).setLogEstado("[Erro]: Esta variável já foi declarada anteriormente!\n", 2);
-                    }
-                }
+                tabela.get(i).setCatTipVal("Variável", tabela.get(i).getTipo(), tabela.get(i).getValor());
             }
+            else if(tabela.get(i).getToken().equals("valor_decimal") || 
+                    tabela.get(i).getToken().equals("valor_octal") || 
+                    tabela.get(i).getToken().equals("valor_hexadecimal"))
+                tabela.get(i).setCatTipVal("-", "int", tabela.get(i).getPalavra());
+            
+            else if(tabela.get(i).getToken().equals("valor_char"))
+                tabela.get(i).setCatTipVal("-", "char", tabela.get(i).getPalavra());
+            
+            else if(tabela.get(i).getToken().equals("valor_string"))
+                tabela.get(i).setCatTipVal("-", "string", tabela.get(i).getPalavra());
+            /*
+            Fazer para operadores
+            Fazer para ifs, else, while, etc.
+            */
         }
+        
         return tabela;
     }
     

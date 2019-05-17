@@ -23,7 +23,6 @@ public class Colors {
                                     "	{\n" +
                                     "		while(x < y)\n" +
                                     "		{\n" +
-                                    "			++x;\n" +
                                     "			y = y * 10 / (x * 2);\n" +
                                     "		}\n" +
                                     "	}\n" +

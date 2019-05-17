@@ -370,6 +370,15 @@ public class TelaInicialController implements Initializable {
             adicionarAnaliseSintatica((ArrayList<TabelaTokens>)obj[1]);
             adicionarNoTableview((ArrayList<TabelaTokens>)obj[1]);
             
+            ArrayList<TabelaTokens> listVars = (ArrayList<TabelaTokens>)obj[1];
+            for (int i = 0; i < listVars.size(); i++) {
+                System.out.println("Nome: " + listVars.get(i).getPalavra());
+                System.out.println("Tipo: " + listVars.get(i).getTipo());
+                System.out.println("Valr: " + listVars.get(i).getValor());
+                System.out.println("Cate: " + listVars.get(i).getCategoria());
+                System.out.println("Orig: " + listVars.get(i).getOrigem());
+                System.out.println("");
+            }
             //c.replaceText((String)obj[2]);
             //Colors cor = new Colors(c);
             //System.out.println("" + (String)obj[2]);
@@ -453,5 +462,6 @@ public class TelaInicialController implements Initializable {
 
     @FXML
     private void evtTelaSobre(ActionEvent event) {
+        
     }
 }

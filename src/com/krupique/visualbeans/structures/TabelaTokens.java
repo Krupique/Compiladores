@@ -16,9 +16,11 @@ public class TabelaTokens {
     private int linha;
     private int coluna;
     private int estado;
-    private String categoria;
-    private String tipo;
-    private String valor;
+    
+    private String categoria; //Variável, Declaração ou valor
+    private String tipo; //Tipo da variável ou do valor
+    private String valor; 
+    private String origem; //É declaração de variável ou não?
 
     public TabelaTokens(String palavra, String token, String log, int linha, int coluna, int estado) {
         this.palavra = palavra;
@@ -29,7 +31,7 @@ public class TabelaTokens {
         this.estado = estado;
     }
 
-    public TabelaTokens(String palavra, String token, String log, int linha, int coluna, int estado, String categoria, String tipo, String valor) {
+    public TabelaTokens(String palavra, String token, String log, int linha, int coluna, int estado, String categoria, String tipo, String valor, String origem) {
         this.palavra = palavra;
         this.token = token;
         this.log = log;
@@ -39,9 +41,34 @@ public class TabelaTokens {
         this.categoria = categoria;
         this.tipo = tipo;
         this.valor = valor;
+        this.origem = origem;
     }
     
+    public void setCatTipVal(String cat, String tipo, String valor)
+    {
+        this.categoria = cat;
+        this.tipo = tipo;
+        this.valor = valor;
+    }
     
+    public void setCatTipValOri(String cat, String tipo, String valor, String origem)
+    {
+        this.categoria = cat;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.origem = origem;
+    }
+    
+    public void setTipoValOri(String tipo, String valor, String origem){
+        this.tipo = tipo;
+        this.valor = valor;
+        this.origem = origem;
+    }
+    
+    public void setTipoVal(String tipo, String valor){
+        this.tipo = tipo;
+        this.valor = valor;
+    }
 
     public String getPalavra() {
         return palavra;
@@ -95,5 +122,43 @@ public class TabelaTokens {
     {
         this.log = log;
         this.estado = estado;
+        /*
+        this.categoria = "";
+        this.tipo = "";
+        this.palavra = "";*/
     }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+    
+    
 }
