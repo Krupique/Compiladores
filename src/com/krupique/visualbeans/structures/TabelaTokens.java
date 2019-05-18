@@ -178,6 +178,4 @@ public class TabelaTokens {
     public void setOrigem(String origem) {
         this.origem = origem;
     }
-    
-    
 }
