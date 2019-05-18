@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -94,6 +95,7 @@
                   <Separator layoutX="142.0" layoutY="20.0" orientation="VERTICAL" prefHeight="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="5.0" />
                   <Pane fx:id="panecompile" layoutX="35.0" layoutY="35.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
                   <ImageView fx:id="imgcompile" fitHeight="40.0" fitWidth="40.0" layoutX="360.0" layoutY="48.0" onMouseClicked="#evtCompileFile" onMouseEntered="#evtCompileEntered" onMouseExited="#evtCompileExited" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="5.0" />
+                  <JFXCheckBox fx:id="ckExibir" checkedColor="#daa528" layoutX="705.0" layoutY="16.0" onAction="#evtExibr" text="Exibir somente variáveis e valores" textFill="WHITE" />
                </children>
             </AnchorPane>
          </top>
@@ -175,6 +177,15 @@
                                           <JFXTextArea fx:id="textSemantic" editable="false" focusColor="#34333a" prefHeight="206.0" prefWidth="760.0" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                        </children></AnchorPane>
                                 </content>
+                              </Tab>
+                              <Tab text="Código Intermediário">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <JFXTextArea fx:id="textIntermed" editable="false" focusColor="#34333a" prefHeight="206.0" prefWidth="760.0" unFocusColor="#34333a" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
                               </Tab>
                            </tabs>
                         </TabPane>

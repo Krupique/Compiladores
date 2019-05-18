@@ -1,5 +1,6 @@
 package com.krupique.visualbeans.analysis;
 
+import com.krupique.visualbeans.sintese.GeradorCodigoIntermed;
 import com.krupique.visualbeans.structures.ListaVariaveis;
 import com.krupique.visualbeans.structures.Pilha;
 import com.krupique.visualbeans.structures.TabelaTokens;
@@ -14,6 +15,9 @@ public class Sintatica {
     private Pilha pilha;
     private int i;
     private ArrayList<TabelaTokens> tabela;
+    private ArrayList<TabelaTokens> tabelaSintatica;
+    private ArrayList<TabelaTokens> tabelaSemantica;
+    private ArrayList<TabelaTokens> tabelaCodIntermed;
     private ArrayList<TabelaTokens> tabelaRes;
     private ArrayList<ListaVariaveis> listVariaveis;
     
@@ -23,7 +27,7 @@ public class Sintatica {
     
     public Object[] analisar()
     {   
-        Object[] obj = new Object[4];
+        Object[] obj = new Object[5];
         Object[] objaux;
         listVariaveis = new ArrayList<ListaVariaveis>();
         
@@ -34,28 +38,57 @@ public class Sintatica {
         objaux = lexica.gerarAnalise(); //Faz a análise léxica
         
         tabela = (ArrayList<TabelaTokens>)objaux[1];
-        tabelaRes = new ArrayList<>();
         
-        
+        tabela = resolveAttrib();
         identificarProgram(); //Faz a análise sintática.
-        //Semantica semantic = new Semantica(tabela);
-        //tabela = semantic.validar();
-        for (int j = 0; j < tabela.size(); j++) {
-            if(tabela.get(j).getToken().equals("tk_declaracao_program") ||    
-                    tabela.get(j).getToken().equals("identificador") ||
-                    tabela.get(j).getToken().contains("valor"))
-                tabelaRes.add(tabela.get(j));
-        }
-        Semantica semantica = new Semantica(tabelaRes);
-        tabelaRes = semantica.validar();
+        tabelaSintatica = atribTabela(tabela);
         
+        Semantica semantica = new Semantica(tabela);
+        tabela = semantica.validar();
+        tabela = semantica.removerInuteis();
+        tabelaSemantica = semantica.somenteVariaveis();
+        
+        boolean erro = false;
+        for (int j = 0; j < tabela.size() && !erro; j++) {
+            if(tabela.get(j).getEstado() != 0)
+                erro = true;
+        }
+        
+        tabelaCodIntermed = new ArrayList<>();
+        if(!erro) //Nenhuma das análises pode estar errado
+        {
+            GeradorCodigoIntermed intermed = new GeradorCodigoIntermed(tabela);
+            tabela = intermed.getResfinal();
+            tabelaCodIntermed = atribTabela(tabela);
+        }
+        
+        //Exibir codigo intermediario
+        for (int j = 0; j < tabela.size(); j++) {
+            if(tabela.get(j).getPalavra().equals(";"))
+                System.out.println(";");
+            else
+                System.out.print(tabela.get(j).getPalavra() + " ");
+        }
+        System.out.println("BREAK");
         
         //Empacota os dados em um vetor de objetos. Famoso MVC.
         obj[0] = objaux[0]; //Texto léxico.
-        obj[1] = tabelaRes; //Tabela com a informação sobre todos os tokens.
+        obj[1] = tabelaSintatica; //Tabela com a informação sobre todos os tokens.
         obj[2] = codigo; //Texto formatado. (Foram removidos os espaços e \n's sobressalente)
-        obj[3] = listVariaveis; //Lista com todas as variáveis. (Serve para a análise semântica).
+        /*Fazer isso depois */
+        obj[3] = tabelaSemantica; //Lista com todas as variáveis. (Serve para a análise semântica).
+        obj[4] = tabelaCodIntermed; //Lista com todas as variáveis. (Serve para a análise semântica).
         return obj;
+    }
+    
+    private ArrayList<TabelaTokens> atribTabela(ArrayList<TabelaTokens> tab)
+    {
+        ArrayList<TabelaTokens> temp = new ArrayList<>();
+        for (int j = 0; j < tab.size(); j++) {
+            temp.add(new TabelaTokens(tab.get(j)));
+        }
+        
+        return temp;
     }
     
     private void identificarProgram()
@@ -920,7 +953,10 @@ public class Sintatica {
                                 tabela.get(auxj).setLogEstado("[Erro]: A variável " + tabela.get(auxj).getPalavra() + " não possui valor!", 2);
                             else
                             {
-                                tabela.get(auxj).setCatTipValOri(tabela.get(k).getCategoria(), tabela.get(k).getTipo(), tabela.get(k).getValor(), "-");
+                                if(!tabela.get(k).getValor().equals("exp"))
+                                    tabela.get(auxj).setCatTipValOri(tabela.get(k).getCategoria(), tabela.get(k).getTipo(), tabela.get(k).getValor(), "-");
+                                else    
+                                    tabela.get(auxj).setCatTipValOri(tabela.get(k).getCategoria(), tabela.get(k).getTipo(), "ope", "-");
                             }
                             achou = true;
                         }
@@ -1026,6 +1062,71 @@ public class Sintatica {
         
         return achou;
         
+    }
+    
+    private ArrayList<TabelaTokens> resolveAttrib()
+    {
+        ArrayList<TabelaTokens> temp = new ArrayList<>();
+        int i = 0;
+        while (i < tabela.size())
+        {
+            if(tabela.get(i).getToken().equals("tk_atribuicao_add"))
+            {
+                temp.add(new TabelaTokens("=", "tk_atribuicao", tabela.get(i).getLog(),
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+                temp.add(new TabelaTokens(tabela.get(i - 1).getTudo()));
+                temp.add(new TabelaTokens("+", "tk_add", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            }
+            
+            else if(tabela.get(i).getToken().equals("tk_atribuicao_sub"))
+            {
+                temp.add(new TabelaTokens("=", "tk_atribuicao", tabela.get(i).getLog(),
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+                temp.add(new TabelaTokens(tabela.get(i - 1).getTudo()));
+                temp.add(new TabelaTokens("-", "tk_sub", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            }
+            
+            else if(tabela.get(i).getToken().equals("tk_atribuicao_resto"))
+            {
+                temp.add(new TabelaTokens("=", "tk_atribuicao", tabela.get(i).getLog(),
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+                temp.add(new TabelaTokens(tabela.get(i - 1).getTudo()));
+                temp.add(new TabelaTokens("%", "tk_resto", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            }
+            
+            else if(tabela.get(i).getToken().equals("tk_atribuicao_div"))
+            {
+                temp.add(new TabelaTokens("=", "tk_atribuicao", tabela.get(i).getLog(),
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+                temp.add(new TabelaTokens(tabela.get(i - 1).getTudo()));
+                temp.add(new TabelaTokens("/", "tk_div", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            }
+            
+            else if(tabela.get(i).getToken().equals("tk_atribuicao_mult"))
+            {
+                temp.add(new TabelaTokens("=", "tk_atribuicao", tabela.get(i).getLog(),
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+                temp.add(new TabelaTokens(tabela.get(i - 1).getTudo()));
+                temp.add(new TabelaTokens("*", "tk_mult", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            }
+            else
+            {
+                TabelaTokens aux = new TabelaTokens(tabela.get(i).getPalavra(), tabela.get(i).getToken(), 
+                        tabela.get(i).getLog(), tabela.get(i).getLinha(), tabela.get(i).getColuna(), 
+                        tabela.get(i).getEstado(), tabela.get(i).getCategoria(), tabela.get(i).getTipo(),
+                        tabela.get(i).getValor(), tabela.get(i).getOrigem());
+                temp.add(aux);
+            }
+            i++;
+        }
+        
+        
+        return temp;
     }
                             
 }

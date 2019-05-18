@@ -15,24 +15,23 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 public class Colors {
     private CodeArea codeArea;
     private String exampleString =  "program exemplo;\n" +
-                                    "{\n" +
-                                    "	int x = 10; @Isto é um comentário@\n" +
-                                    "	int y = 20;\n" +
-                                    "	char cr = 'S';\n" +
-                                    "	if(x < y)\n" +
-                                    "	{\n" +
-                                    "		while(x < y)\n" +
-                                    "		{\n" +
-                                    "			y = y * 10 / (x * 2);\n" +
-                                    "		}\n" +
-                                    "	}\n" +
-                                    "	else\n" +
-                                    "	{\n" +
-                                    "		for(int var; var < y; var++;)\n" +
-                                    "		{\n" +
-                                    "			x += 30 * 2;\n" +
-                                    "		}\n" +
-                                    "	}\n" +
+                                    "{\n"+
+                                    "   int x = 10;\n"+
+                                    "   double y = 20;\n"+
+                                    "   int test = 50;\n"+
+                                    "   double test2 = 25;\n"+
+                                    "   if(x < y)\n"+
+                                    "   {\n"+
+                                    "       while(x < y)\n"+
+                                    "       {\n"+
+                                    "           y++;\n"+
+                                    "           x = x * 2;\n"+
+                                    "       }\n"+
+                                    "   }\n" +
+                                    "   for(int var = 0; var < y; var++;)\n"+
+                                    "   {\n"+
+                                    "       x += 2;\n"+
+                                    "   }\n" +
                                     "}";
 
     private static final String[] KEYWORDS = new String[]{"boolean", "char", "double", "else", "false", "for", "if", "int", "mentira", "null", "nulo", "NULL", "program", "string", "true", "verdade", "while"};

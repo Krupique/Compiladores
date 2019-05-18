@@ -5,6 +5,7 @@
  */
 package com.krupique.visualbeans.init;
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.krupique.visualbeans.analysis.Lexica;
 import com.krupique.visualbeans.analysis.Sintatica;
@@ -83,18 +84,6 @@ public class TelaInicialController implements Initializable {
     private TabPane tabTokens;
     @FXML
     private JFXTextArea textLexico;
-
-    private ArrayList<Tab> listtabs;
-    private int flagTheme;
-    private String corTheme;
-    
-    private String tecla;
-    private String textoLexico;
-    private Lexica lexica;
-    private String string;
-    private String stropen;
-    
-    private ArrayList<TabelaTokens> tabela;
     @FXML
     private TableColumn<String, String> clPalavra;
     @FXML
@@ -113,6 +102,22 @@ public class TelaInicialController implements Initializable {
     private TableColumn<String, String> clValor;
     @FXML
     private JFXTextArea textSemantic;
+    @FXML
+    private JFXTextArea textIntermed;
+    @FXML
+    private JFXCheckBox ckExibir;
+    
+    
+    private ArrayList<Tab> listtabs;
+    private int flagTheme;
+    private String corTheme;
+    private String tecla;
+    private String textoLexico;
+    private Lexica lexica;
+    private String string;
+    private String stropen;
+    private ArrayList<TabelaTokens> tabela;
+    Object[] obj;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -122,7 +127,7 @@ public class TelaInicialController implements Initializable {
         
         string = "";
         listtabs = new ArrayList<Tab>();
-        
+        obj = new Object[5];
     }    
     
     private void iniciarTableview()
@@ -360,28 +365,15 @@ public class TelaInicialController implements Initializable {
        
         if(c.getText().length() > 0)
         {
-            Object[] obj = new Object[4];
+            
 
             Sintatica sintatica = new Sintatica(c.getText());
             obj = sintatica.analisar();
 
-
+            setTextIntermed((ArrayList<TabelaTokens>)obj[4]);
             textLexico.setText((String)obj[0]);
             adicionarAnaliseSintatica((ArrayList<TabelaTokens>)obj[1]);
             adicionarNoTableview((ArrayList<TabelaTokens>)obj[1]);
-            
-            ArrayList<TabelaTokens> listVars = (ArrayList<TabelaTokens>)obj[1];
-            for (int i = 0; i < listVars.size(); i++) {
-                System.out.println("Nome: " + listVars.get(i).getPalavra());
-                System.out.println("Tipo: " + listVars.get(i).getTipo());
-                System.out.println("Valr: " + listVars.get(i).getValor());
-                System.out.println("Cate: " + listVars.get(i).getCategoria());
-                System.out.println("Orig: " + listVars.get(i).getOrigem());
-                System.out.println("");
-            }
-            //c.replaceText((String)obj[2]);
-            //Colors cor = new Colors(c);
-            //System.out.println("" + (String)obj[2]);
         }
         else
         {
@@ -463,5 +455,54 @@ public class TelaInicialController implements Initializable {
     @FXML
     private void evtTelaSobre(ActionEvent event) {
         
+    }
+
+    @FXML
+    private void evtExibr(ActionEvent event) {
+        ArrayList<TabelaTokens> list;
+        if(ckExibir.isSelected())
+        {
+            list = (ArrayList<TabelaTokens>)obj[3];
+        }
+        else
+        {
+            list = (ArrayList<TabelaTokens>)obj[1];
+        }
+        adicionarNoTableview(list);
+    }
+
+    private void setTextIntermed(ArrayList<TabelaTokens> ls) {
+        String str = "";
+        String pal;
+        int cont = 0;
+        for (int i = 0; i < ls.size(); i++) {
+            pal = ls.get(i).getPalavra();
+            if(pal.equals(";"))
+            {
+                str += ";\n";
+                str = addSpace(str, cont);
+            }
+            else if(pal.equals("{"))
+            {
+                str += "{\n";
+                str = addSpace(str, ++cont);
+            }
+            else if(pal.equals("}"))
+            {
+                str = addSpace(str, --cont);
+                str += "}\n";
+            }
+            else
+                str += pal + " ";
+        }
+        
+        textIntermed.setText(str);
+    }
+    
+    private String addSpace(String str, int cont)
+    {
+        for (int i = 0; i < cont; i++)
+            str += "\t";
+        return str;
     }
 }

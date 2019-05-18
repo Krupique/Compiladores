@@ -18,6 +18,10 @@ public class Semantica {
     
     public Semantica(ArrayList<TabelaTokens> tabela) {
         this.tabela = tabela;
+        for (int i = 0; i < tabela.size(); i++)
+            if(tabela.get(i).getValor()== null)
+                tabela.get(i).setValor("");
+        
     }
     
     public ArrayList<TabelaTokens> validar()
@@ -48,4 +52,98 @@ public class Semantica {
         return tabela;
     }
     
+    public ArrayList<TabelaTokens> somenteVariaveis()
+    {
+        ArrayList<TabelaTokens> temp = new ArrayList<>();
+        String token;
+        for (int i = 0; i < tabela.size(); i++) {
+            token = tabela.get(i).getToken();
+            if(token.equals("identificador") || token.equals("valor_decimal") || 
+                    token.equals("valor_octal") || token.equals("valor_hexadecimal") ||
+                    token.equals("valor_char") || token.equals("valor_string"))
+                temp.add(new TabelaTokens(tabela.get(i)));
+            
+        }
+        return temp;
+    }
+    
+    
+    public ArrayList<TabelaTokens> removerInuteis()
+    {
+        int i = 0;
+        while(i < tabela.size())
+        {
+            boolean flag = false;
+            if(tabela.get(i).getOrigem() != null && tabela.get(i).getOrigem().equals("declaracao") && !flag)
+            {
+                int j = i + 1;
+                boolean achou = false;
+                while(j < tabela.size() && !achou)
+                {
+                    String aux = tabela.get(i).getPalavra();
+                    if(tabela.get(i).getPalavra().equals(tabela.get(j).getPalavra()))
+                        achou = true;
+                    j++;
+                }
+                
+                if(!achou)
+                {
+                    removerLinha(i);
+                    //tabela.remove(i);
+                    i = 0;
+                    continue;
+                }
+            }
+            
+            i++;
+        }
+        
+        return tabela;
+    }
+    
+    private int removerLinha(int pos)
+    {
+        int i = pos;
+        int cont = 0;
+        while(!tabela.get(i).getToken().equals("tk_ponto_virgula"))
+        {
+            cont++;
+            i++;
+        }
+        for (int j = 0; j < cont + 1; j++)
+            tabela.remove(pos);
+        
+        cont = 0;
+        pos--;
+        i = pos;
+        while(!tabela.get(i).getToken().equals("tk_ponto_virgula"))
+        {
+            cont++;
+            i--;
+        }
+        
+        pos = pos - cont + 1;
+        for (int j = 0; j < cont; j++) {
+            tabela.remove(pos);
+        }
+        return pos;
+    }
+    
+    
+    
+    
+    public ArrayList<TabelaTokens> cast()
+    {
+        int i = 0;
+        while(i < tabela.size())
+        {
+            //Fazer isso
+            
+            
+            i++;
+        }
+        
+        
+        return tabela;
+    }
 }
