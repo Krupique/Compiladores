@@ -37,6 +37,7 @@ public class Sintatica {
         objaux = lexica.gerarAnalise(); //Faz a análise léxica
         
         tabela = (ArrayList<TabelaTokens>)objaux[1];
+        tabela =  inicializaNulos(tabela);
         
         tabela = resolveAttrib();
         identificarProgram(); //Faz a análise sintática.
@@ -61,9 +62,11 @@ public class Sintatica {
             
             OtimizadorCod otim = new OtimizadorCod(tabela);
             tabela = otim.getTabela();
-            GeradorCodigoMontagem mont = new GeradorCodigoMontagem();
-            
             tabelaCodIntermed = atribTabela(tabela);
+            
+            //Parte de gerar codigo de montagem
+            GeradorCodigoMontagem mont = new GeradorCodigoMontagem(tabela);
+            String montagem = mont.geraCodigo();
         }
         
         
@@ -947,11 +950,11 @@ public class Sintatica {
                     while(k > 0 && !achou){
                         if(tabela.get(k).getPalavra().equals(tabela.get(auxj).getPalavra())){
                             //Achou
-                            if(tabela.get(k).getValor().equals("--"))
+                            if(tabela.get(k).getValor() != null && tabela.get(k).getValor().equals("--"))
                                 tabela.get(auxj).setLogEstado("[Erro]: A variável " + tabela.get(auxj).getPalavra() + " não possui valor!", 2);
                             else
                             {
-                                if(!tabela.get(k).getValor().equals("exp"))
+                                if(tabela.get(k).getValor() != null && !tabela.get(k).getValor().equals("exp"))
                                     tabela.get(auxj).setCatTipValOri(tabela.get(k).getCategoria(), tabela.get(k).getTipo(), tabela.get(k).getValor(), "-");
                                 else    
                                     tabela.get(auxj).setCatTipValOri(tabela.get(k).getCategoria(), tabela.get(k).getTipo(), "ope", "-");
@@ -1125,6 +1128,13 @@ public class Sintatica {
         
         
         return temp;
+    }
+
+    private ArrayList<TabelaTokens> inicializaNulos(ArrayList<TabelaTokens> tabela) {
+        for (int j = 0; j < tabela.size(); j++) {
+            tabela.get(j).setCatTipValOri("", "", "", "");
+        }
+        return tabela;
     }
                             
 }

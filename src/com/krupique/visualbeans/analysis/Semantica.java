@@ -125,7 +125,7 @@ public class Semantica {
         cont = 0;
         pos--;
         i = pos;
-        while(!tabela.get(i).getToken().equals("tk_ponto_virgula"))
+        while(i >= 0 && !tabela.get(i).getToken().equals("tk_ponto_virgula"))
         {
             cont++;
             i--;
@@ -138,20 +138,6 @@ public class Semantica {
         return pos;
     }
     
-    public ArrayList<TabelaTokens> cast()
-    {
-        int i = 0;
-        while(i < tabela.size())
-        {
-            //Fazer isso
-            
-            
-            i++;
-        }
-        
-        
-        return tabela;
-    }
 
     public ArrayList<String> getLogs() {
         return logs;

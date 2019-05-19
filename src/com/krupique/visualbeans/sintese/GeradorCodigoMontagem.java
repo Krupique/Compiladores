@@ -5,10 +5,34 @@
  */
 package com.krupique.visualbeans.sintese;
 
+import com.krupique.visualbeans.structures.Montagem;
+import com.krupique.visualbeans.structures.TabelaTokens;
+import java.util.ArrayList;
+
 /**
  *
  * @author Henrique K. Secchi
  */
 public class GeradorCodigoMontagem {
+    
+    ArrayList<TabelaTokens> tabela;
+    ArrayList<Montagem> montagem;
+
+    public GeradorCodigoMontagem(ArrayList<TabelaTokens> tabela) {
+        this.tabela = tabela;
+        montagem = new ArrayList<>();
+    }
+    
+    public String geraCodigo()
+    {
+        
+        return "hehe";
+    }
+    
+    
+
+    public ArrayList<TabelaTokens> getTabela() {
+        return tabela;
+    }
     
 }
