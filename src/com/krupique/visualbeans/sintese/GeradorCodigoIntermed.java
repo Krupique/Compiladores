@@ -27,6 +27,9 @@ public class GeradorCodigoIntermed {
                 i = executa(tabela, i);
             i++;
         }
+        
+        substituiInc(tabela);
+        converteFor(tabela);
         atribTab(tabela);
     }
     
@@ -133,8 +136,6 @@ public class GeradorCodigoIntermed {
         resultado.add(_temp);
         _temp = new TabelaTokens(aux.get(0));
         resultado.add(_temp);
-        _temp = new TabelaTokens(";", "tk_ponto_virgula", "", 0, 0, 0);
-            resultado.add(_temp);
         aux.remove(0);
         
         print(resultado);
@@ -156,18 +157,6 @@ public class GeradorCodigoIntermed {
         }
         
         
-    }
-    
-    private void separa(ArrayList<TabelaTokens> aux)
-    {
-        if(aux.size() > 0)
-        {
-            int init = possuiParenteses(aux);
-            if(init == -1)
-                init  = encontraPos(aux);
-            
-            
-        }
     }
     
     private int possuiParenteses(ArrayList<TabelaTokens> aux)
@@ -199,21 +188,97 @@ public class GeradorCodigoIntermed {
         
         return pos;
     }
-    
-    
-    public ArrayList<String> realocarArray(ArrayList<String> original, ArrayList<String> sublista, int pos)
-    {
-        ArrayList<String> resultado = new ArrayList<>();
-        for (int i = 0; i < pos; i++) 
-            resultado.add(original.get(i));
-        
-        for (int i = 0; i < sublista.size(); i++) 
-            resultado.add(sublista.get(i));
-        
-        for (int i = pos; i < original.size(); i++)
-            resultado.add(original.get(i));
-       
-        return resultado;
+
+    private void substituiInc(ArrayList<TabelaTokens> tabela) {
+        int i = 0;
+        String token, aux;
+        TabelaTokens temp;
+        while(i < tabela.size())
+        {
+            token = tabela.get(i).getToken();
+            if(token.equals("tk_inc"))
+            {
+                temp = tabela.get(i - 1).getTudo();
+                {
+                    tabela.remove(i);
+                    
+                    tabela.add(i, new TabelaTokens("1", "valor_decimal", temp.getLog(), temp.getLinha(), temp.getColuna(), temp.getEstado()));
+                    tabela.add(i, new TabelaTokens("+", "tk_add", temp.getLog(), temp.getLinha(), temp.getColuna(), temp.getEstado()));
+                    tabela.add(i, new TabelaTokens(temp));
+                    tabela.add(i, new TabelaTokens("=", "tk_atribuicao", "", temp.getLinha(), temp.getColuna(), temp.getEstado()));
+                }
+            }
+            else if (token.equals("tk_dec"))
+            {
+                temp = tabela.get(i - 1).getTudo();
+                {
+                    tabela.remove(i);
+                    
+                    tabela.add(i, new TabelaTokens("1", "valor_decimal", temp.getLog(), temp.getLinha(), temp.getColuna(), temp.getEstado()));
+                    tabela.add(i, new TabelaTokens("-", "tk_sub", temp.getLog(), temp.getLinha(), temp.getColuna(), temp.getEstado()));
+                    tabela.add(i, new TabelaTokens(temp));
+                    tabela.add(i, new TabelaTokens("=", "tk_atribuicao", "", temp.getLinha(), temp.getColuna(), temp.getEstado()));
+                }
+            }
+            i++;
+        }
+    }
+
+    private void converteFor(ArrayList<TabelaTokens> tabela) {
+        int i = 0;
+        String token, aux;
+        TabelaTokens temp;
+        while(i < tabela.size())
+        {
+            token = tabela.get(i).getToken();
+            if(token.equals("tk_comando_for"))
+            {
+                tabela.remove(i); //Deleta for.
+                tabela.remove(i); //Delete abre parenteses
+                while(!tabela.get(i).getToken().equals("tk_ponto_virgula"))
+                    i++;
+                i++;
+                
+                tabela.add(i, new TabelaTokens("(", "tk_abrir_parenteses", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            
+                tabela.add(i, new TabelaTokens("while", "tk_comando_while", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+            
+                while(!tabela.get(i).getToken().equals("tk_ponto_virgula"))
+                    i++;
+                
+                
+                tabela.remove(i); //Remover ponto e virgula
+                tabela.add(i, new TabelaTokens(")", "tk_fechar_parenteses", tabela.get(i).getLog(), 
+                        tabela.get(i).getLinha(), tabela.get(i).getColuna(), tabela.get(i).getEstado()));
+                
+                int j = i++;
+                while(!tabela.get(j).getToken().equals("tk_abrir_chaves"))
+                    j++;
+                j++;
+                int cont = 1;
+                while(cont != 0)
+                {
+                    if(tabela.get(j).getToken().equals("tk_fechar_chaves"))
+                        cont--;
+                    else if(tabela.get(j).getToken().equals("tk_abrir_chaves"))
+                        cont++;
+                    j++;
+                }
+                
+                j--;
+                while(!tabela.get(i).getToken().equals("tk_ponto_virgula"))
+                {
+                    tabela.add(j, tabela.get(i).getTudo());
+                    tabela.remove(i);
+                }
+                tabela.remove(i);
+                tabela.remove(i);
+            }
+            
+            i++;
+        }
     }
     
     

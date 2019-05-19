@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Semantica {
 
     private ArrayList<TabelaTokens> tabela;
+    private ArrayList<String> logs;
     
     public Semantica(ArrayList<TabelaTokens> tabela) {
         this.tabela = tabela;
@@ -70,6 +71,13 @@ public class Semantica {
     
     public ArrayList<TabelaTokens> removerInuteis()
     {
+        tabela.remove(0);
+        tabela.remove(0);
+        tabela.remove(0);
+        tabela.remove(0);
+        tabela.remove(tabela.size() - 1);
+        logs = new ArrayList<>();
+        
         int i = 0;
         while(i < tabela.size())
         {
@@ -88,6 +96,7 @@ public class Semantica {
                 
                 if(!achou)
                 {
+                    logs.add(tabela.get(i).getPalavra());
                     removerLinha(i);
                     //tabela.remove(i);
                     i = 0;
@@ -129,9 +138,6 @@ public class Semantica {
         return pos;
     }
     
-    
-    
-    
     public ArrayList<TabelaTokens> cast()
     {
         int i = 0;
@@ -146,4 +152,10 @@ public class Semantica {
         
         return tabela;
     }
+
+    public ArrayList<String> getLogs() {
+        return logs;
+    }
+    
+    
 }

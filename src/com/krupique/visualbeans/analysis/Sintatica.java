@@ -1,6 +1,7 @@
 package com.krupique.visualbeans.analysis;
 
 import com.krupique.visualbeans.sintese.GeradorCodigoIntermed;
+import com.krupique.visualbeans.sintese.GeradorCodigoMontagem;
 import com.krupique.visualbeans.sintese.OtimizadorCod;
 import com.krupique.visualbeans.structures.Pilha;
 import com.krupique.visualbeans.structures.TabelaTokens;
@@ -26,7 +27,7 @@ public class Sintatica {
     
     public Object[] analisar()
     {   
-        Object[] obj = new Object[5];
+        Object[] obj = new Object[6];
         Object[] objaux;
         
         String aux = codigo.replaceAll("\n", " ℡ "); //Substitui todos os "\n" por ℡ (Serve para a análise léxica).
@@ -57,10 +58,12 @@ public class Sintatica {
         {
             GeradorCodigoIntermed intermed = new GeradorCodigoIntermed(tabela);
             tabela = intermed.getResfinal();
-            tabelaCodIntermed = atribTabela(tabela);
             
             OtimizadorCod otim = new OtimizadorCod(tabela);
+            tabela = otim.getTabela();
+            GeradorCodigoMontagem mont = new GeradorCodigoMontagem();
             
+            tabelaCodIntermed = atribTabela(tabela);
         }
         
         
@@ -72,6 +75,7 @@ public class Sintatica {
         /*Fazer isso depois */
         obj[3] = tabelaSemantica; //Lista com todas as variáveis. (Serve para a análise semântica).
         obj[4] = tabelaCodIntermed; //Lista com todas as variáveis. (Serve para a análise semântica).
+        obj[5] = semantica.getLogs(); //Lista com todas as variáveis. (Serve para a análise semântica).
         return obj;
     }
     

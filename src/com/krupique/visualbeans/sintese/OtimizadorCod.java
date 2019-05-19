@@ -22,6 +22,7 @@ public class OtimizadorCod {
         otim2(); //Regra 6
         otim3();
         
+        removerInuteis();
         print();
     }
     
@@ -168,5 +169,14 @@ public class OtimizadorCod {
     private void otim3()
     {
         
+    }
+
+    private void removerInuteis() {
+        
+        
+    }
+    
+    public ArrayList<TabelaTokens> getTabela() {
+        return tabela;
     }
 }

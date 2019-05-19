@@ -361,7 +361,8 @@ public class TelaInicialController implements Initializable {
     private void evtCompileFile(MouseEvent event) {
         AnchorPane p = (AnchorPane)tabFiles.getSelectionModel().getSelectedItem().getContent();
         CodeArea c = (CodeArea)p.getChildren().get(0);
-       
+        ArrayList<String> logs;
+        String str = "";
         if(c.getText().length() > 0)
         {
             
@@ -371,6 +372,14 @@ public class TelaInicialController implements Initializable {
 
             setTextIntermed((ArrayList<TabelaTokens>)obj[4]);
             textLexico.setText((String)obj[0]);
+            
+            //Printa variáveis não utilizadas
+            logs = (ArrayList<String>)obj[5];
+            for (int i = 0; i < logs.size(); i++)
+                str += "A variável " + logs.get(i) + " não é utilizada.\n";
+            textSemantic.setText(str);
+            
+            
             adicionarAnaliseSintatica((ArrayList<TabelaTokens>)obj[1]);
             adicionarNoTableview((ArrayList<TabelaTokens>)obj[1]);
         }
@@ -431,8 +440,9 @@ public class TelaInicialController implements Initializable {
         for (int i = 0; i < erros.size(); i++)
             p.getChildren().add(erros.get(i).getImg());
         
+        
         textSintatico.setText(strsint);
-        textSemantic.setText(strseman);
+        textSemantic.setText(textSemantic.getText() +  strseman);
     }
 
     @FXML
@@ -475,24 +485,12 @@ public class TelaInicialController implements Initializable {
         String pal;
         int cont = 0;
         for (int i = 0; i < ls.size(); i++) {
-            pal = ls.get(i).getPalavra();
-            if(pal.equals(";"))
-            {
+            if(ls.get(i).getPalavra().equals(";"))
                 str += ";\n";
-                str = addSpace(str, cont);
-            }
-            else if(pal.equals("{"))
-            {
+            else if(ls.get(i).getPalavra().equals("{"))
                 str += "{\n";
-                str = addSpace(str, ++cont);
-            }
-            else if(pal.equals("}"))
-            {
-                str = addSpace(str, --cont);
-                str += "}\n";
-            }
             else
-                str += pal + " ";
+                str += ls.get(i).getPalavra() + " ";
         }
         
         textIntermed.setText(str);
