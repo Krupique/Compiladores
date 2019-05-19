@@ -9,7 +9,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.krupique.visualbeans.analysis.Lexica;
 import com.krupique.visualbeans.analysis.Sintatica;
-import com.krupique.visualbeans.structures.ListaVariaveis;
 import com.krupique.visualbeans.structures.TabelaTokens;
 import com.krupique.visualbeans.utils.Colors;
 import com.krupique.visualbeans.utils.Erros;

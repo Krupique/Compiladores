@@ -58,6 +58,20 @@ public class TabelaTokens {
         this.origem = tk.getOrigem();
     }
     
+    public void setTudo(TabelaTokens tk)
+    {
+        this.palavra = tk.getPalavra();
+        this.token = tk.getToken();
+        this.log = tk.getLog();
+        this.linha = tk.getLinha();
+        this.coluna = tk.getColuna();
+        this.estado = tk.getEstado();
+        this.categoria = tk.getCategoria();
+        this.tipo = tk.getTipo();
+        this.valor = tk.getValor();
+        this.origem = tk.getOrigem();
+    }
+    
     public TabelaTokens getTudo()
     {
         return new TabelaTokens(palavra, token, log, linha, coluna, estado, categoria, tipo, valor, origem);

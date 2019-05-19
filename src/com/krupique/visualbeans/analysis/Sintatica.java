@@ -1,7 +1,7 @@
 package com.krupique.visualbeans.analysis;
 
 import com.krupique.visualbeans.sintese.GeradorCodigoIntermed;
-import com.krupique.visualbeans.structures.ListaVariaveis;
+import com.krupique.visualbeans.sintese.OtimizadorCod;
 import com.krupique.visualbeans.structures.Pilha;
 import com.krupique.visualbeans.structures.TabelaTokens;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ public class Sintatica {
     private ArrayList<TabelaTokens> tabelaSemantica;
     private ArrayList<TabelaTokens> tabelaCodIntermed;
     private ArrayList<TabelaTokens> tabelaRes;
-    private ArrayList<ListaVariaveis> listVariaveis;
     
     public Sintatica(String codigo){
         this.codigo = codigo;
@@ -29,7 +28,6 @@ public class Sintatica {
     {   
         Object[] obj = new Object[5];
         Object[] objaux;
-        listVariaveis = new ArrayList<ListaVariaveis>();
         
         String aux = codigo.replaceAll("\n", " ℡ "); //Substitui todos os "\n" por ℡ (Serve para a análise léxica).
         codigo = codigo.replaceAll("\\s*\n+", "\n");//.replaceAll(" +", " ");//.replaceAll("\t", "      "); //Substitui todas as ocorrências de um ou mais "\n" por um único "\n", depois remove todos os espaços extras e por fim substitui todos os tabs por 6 espaços.
@@ -60,16 +58,12 @@ public class Sintatica {
             GeradorCodigoIntermed intermed = new GeradorCodigoIntermed(tabela);
             tabela = intermed.getResfinal();
             tabelaCodIntermed = atribTabela(tabela);
+            
+            OtimizadorCod otim = new OtimizadorCod(tabela);
+            
         }
         
-        //Exibir codigo intermediario
-        for (int j = 0; j < tabela.size(); j++) {
-            if(tabela.get(j).getPalavra().equals(";"))
-                System.out.println(";");
-            else
-                System.out.print(tabela.get(j).getPalavra() + " ");
-        }
-        System.out.println("BREAK");
+        
         
         //Empacota os dados em um vetor de objetos. Famoso MVC.
         obj[0] = objaux[0]; //Texto léxico.
