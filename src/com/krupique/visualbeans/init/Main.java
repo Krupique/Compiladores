@@ -24,7 +24,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         
         stage.setResizable(false);
-        stage.setTitle("VisualBeans - Henrique Krupck Secchi");
+        stage.setTitle("VisualBeansCharm - Henrique Krupck Secchi");
         stage.setMaxWidth(1085);
         stage.setMaxHeight(730);
         stage.setScene(scene);

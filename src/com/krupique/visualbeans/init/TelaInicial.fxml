@@ -143,6 +143,11 @@
                                           <Font name="System Bold" size="22.0" />
                                        </font>
                                     </Label>
+                                    <Label layoutX="531.0" layoutY="1.0" text="Charm" textFill="#5c59b2">
+                                       <font>
+                                          <Font name="System Bold" size="48.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                            </content>
